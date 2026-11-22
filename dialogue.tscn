@@ -1,0 +1,153 @@
+[gd_scene format=3 uid="uid://otxn0li5inx3"]
+
+[ext_resource type="Script" uid="uid://bi8uyy1wng46t" path="res://dialogue.gd" id="1_758ep"]
+[ext_resource type="Texture2D" uid="uid://ckmc5yp6562gc" path="res://char1.png" id="1_oi3j2"]
+[ext_resource type="Texture2D" uid="uid://cebx47knprhw" path="res://char2.png" id="2_758ep"]
+[ext_resource type="Shader" uid="uid://bjnrpcxlbqwg1" path="res://dialogue.gdshader" id="3_hoxo3"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xrivr"]
+bg_color = Color(0.039215688, 0.039215688, 0.039215688, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.3019608, 1, 0.53333336, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_13qdw"]
+shader = ExtResource("3_hoxo3")
+shader_parameter/line_count = 110.0
+shader_parameter/line_opacity = 0.32
+shader_parameter/tint_color = Color(0.25, 1, 0.55, 1)
+shader_parameter/tint_strength = 0.1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b1lj4"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_13qdw"]
+bg_color = Color(0.039215688, 0.039215688, 0.039215688, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.3019608, 1, 0.53333336, 1)
+
+[node name="Dialogue" type="CanvasLayer" unique_id=400926715]
+script = ExtResource("1_758ep")
+
+[node name="RootUI" type="Control" parent="." unique_id=1865036501]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="ColorRect" parent="RootUI" unique_id=48429866]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.7058824)
+
+[node name="MainMargin" type="MarginContainer" parent="RootUI" unique_id=1270339491]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 80
+theme_override_constants/margin_top = 80
+theme_override_constants/margin_right = 80
+theme_override_constants/margin_bottom = 80
+
+[node name="MainVBox" type="VBoxContainer" parent="RootUI/MainMargin" unique_id=286519516]
+layout_mode = 2
+theme_override_constants/separation = 48
+alignment = 1
+
+[node name="TopSection" type="HBoxContainer" parent="RootUI/MainMargin/MainVBox" unique_id=1457310956]
+layout_mode = 2
+theme_override_constants/separation = 40
+alignment = 1
+
+[node name="LeftPortraitFrame" type="PanelContainer" parent="RootUI/MainMargin/MainVBox/TopSection" unique_id=1485514277]
+custom_minimum_size = Vector2(220, 220)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_xrivr")
+
+[node name="LeftPortrait" type="TextureRect" parent="RootUI/MainMargin/MainVBox/TopSection/LeftPortraitFrame" unique_id=1181927966]
+layout_mode = 2
+texture = ExtResource("1_oi3j2")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Scanline" type="ColorRect" parent="RootUI/MainMargin/MainVBox/TopSection/LeftPortraitFrame" unique_id=1878311011]
+material = SubResource("ShaderMaterial_13qdw")
+layout_mode = 2
+mouse_filter = 2
+
+[node name="CenterThoughtBox" type="VBoxContainer" parent="RootUI/MainMargin/MainVBox/TopSection" unique_id=198030662]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="ThoughtTitle" type="Label" parent="RootUI/MainMargin/MainVBox/TopSection/CenterThoughtBox" unique_id=911156595]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "INNER THOUGHTS"
+horizontal_alignment = 1
+
+[node name="ThoughtImageFrame" type="PanelContainer" parent="RootUI/MainMargin/MainVBox/TopSection/CenterThoughtBox" unique_id=2013543478]
+custom_minimum_size = Vector2(260, 260)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_b1lj4")
+
+[node name="ThoughtImage" type="TextureRect" parent="RootUI/MainMargin/MainVBox/TopSection/CenterThoughtBox/ThoughtImageFrame" unique_id=132389372]
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Scanline3" type="ColorRect" parent="RootUI/MainMargin/MainVBox/TopSection/CenterThoughtBox/ThoughtImageFrame" unique_id=676294606]
+material = SubResource("ShaderMaterial_13qdw")
+layout_mode = 2
+mouse_filter = 2
+
+[node name="RightPortraitFrame" type="PanelContainer" parent="RootUI/MainMargin/MainVBox/TopSection" unique_id=1097329140]
+custom_minimum_size = Vector2(220, 220)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_13qdw")
+
+[node name="RightPortrait" type="TextureRect" parent="RootUI/MainMargin/MainVBox/TopSection/RightPortraitFrame" unique_id=730441128]
+layout_mode = 2
+texture = ExtResource("2_758ep")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Scanline2" type="ColorRect" parent="RootUI/MainMargin/MainVBox/TopSection/RightPortraitFrame" unique_id=1522020323]
+material = SubResource("ShaderMaterial_13qdw")
+layout_mode = 2
+mouse_filter = 2
+
+[node name="BottomSection" type="CenterContainer" parent="RootUI/MainMargin/MainVBox" unique_id=489256200]
+layout_mode = 2
+
+[node name="DialogueText" type="RichTextLabel" parent="RootUI/MainMargin/MainVBox/BottomSection" unique_id=1920147528]
+custom_minimum_size = Vector2(760, 140)
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 24
+bbcode_enabled = true
+scroll_active = false
+
+[node name="PauseButton" type="Button" parent="RootUI" unique_id=749942357]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 1
+offset_left = 32.0
+offset_top = 32.0
+offset_right = 80.0
+offset_bottom = 80.0
+focus_mode = 0
+theme_override_constants/outline_size = 5
+text = "||"

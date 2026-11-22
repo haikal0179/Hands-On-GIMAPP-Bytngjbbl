@@ -1,0 +1,46 @@
+{
+	"intro_utbk": {
+		"left_portrait": "res://char1.png",
+		"right_portrait": "res://char2.png",
+		"lines": [
+			{
+				"speaker": "left",
+				"text": "Tunggu sebentar... ada yang aneh dengan pola soal Penalaran Kuantitatif ini.",
+				"thought_title": "INNER THOUGHTS",
+				"thought_tex": "res://icon.svg",
+				"shake": "left"
+			},
+			{
+				"speaker": "right",
+				"text": "Fokus! Jangan sampai panik, waktunya tinggal sedikit lagi.",
+				"thought_title": "INNER THOUGHTS",
+				"thought_tex": "res://icon.svg"
+			},
+			{
+				"speaker": "left",
+				"text": "Got it. Okay, aku sudah paham polanya. Ayo lanjut!",
+				"thought_title": "FOCUS MODE",
+				"thought_tex": "res://icon.svg"
+			}
+		]
+	},
+	"panik_waktu": {
+		"left_portrait": "res://char1.png",
+		"right_portrait": "res://char2.png",
+		"lines": [
+			{
+				"speaker": "right",
+				"text": "Sisa waktu subtes tinggal 1 menit! Masih ada 3 soal belum diisi!",
+				"thought_title": "WARNING",
+				"thought_tex": "res://icon.svg",
+				"shake": "right"
+			},
+			{
+				"speaker": "left",
+				"text": "Tenang, kerjakan yang paling pendek bacaannya dulu!",
+				"thought_title": "STRATEGY",
+				"thought_tex": "res://icon.svg"
+			}
+		]
+	}
+}
