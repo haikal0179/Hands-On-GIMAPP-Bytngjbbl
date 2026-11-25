@@ -1,0 +1,12 @@
+{
+  "questions": [
+    {"type": "quiz", "question": "Jika 2x - 3 = 9, maka 4x = ?", "options": ["12", "18", "24", "30"], "answer": 2},
+    {"type": "quiz", "question": "Rata-rata dari 4, 8, 12, dan 16 adalah...", "options": ["9", "10", "11", "12"], "answer": 1},
+    {"type": "quiz", "question": "Peluang muncul angka genap pada satu kali lemparan dadu 6 sisi?", "options": ["1/6", "1/3", "1/2", "2/3"], "answer": 2},
+    {"type": "quiz", "question": "Jika x^2 = 49 dan x > 0, maka x^2 - x = ?", "options": ["35", "42", "56", "7"], "answer": 1},
+    {"type": "match", "time": 20, "question": "Susun kepingan memori ke slot yang benar.", "slots": ["ALJABAR", "GEOMETRI", "PELUANG"], "shards": [{"text": "(a + b)^2 = a^2 + 2ab + b^2", "slot": 0}, {"text": "Jumlah sudut dalam segitiga = 180 derajat", "slot": 1}, {"text": "Peluang kejadian yang pasti terjadi = 1", "slot": 2}]},
+    {"type": "quiz", "question": "Sebuah barang didiskon 20% sehingga harganya Rp80.000. Harga semula?", "options": ["Rp96.000", "Rp100.000", "Rp104.000", "Rp120.000"], "answer": 1},
+    {"type": "quiz", "question": "Barisan aritmetika 3, 7, 11, ... Suku ke-10 adalah?", "options": ["35", "39", "43", "47"], "answer": 1},
+    {"type": "quiz", "question": "3 pekerja menyelesaikan suatu pekerjaan dalam 12 hari. 6 pekerja menyelesaikannya dalam...", "options": ["3 hari", "6 hari", "9 hari", "24 hari"], "answer": 1}
+  ]
+}

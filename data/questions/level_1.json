@@ -1,0 +1,10 @@
+{
+  "questions": [
+    {"type": "quiz", "question": "Siapa proklamator kemerdekaan Indonesia bersama Soekarno?", "options": ["Sutan Sjahrir", "Mohammad Hatta", "Tan Malaka", "Ki Hajar Dewantara"], "answer": 1},
+    {"type": "quiz", "question": "Jika 3x + 5 = 20, maka x = ?", "options": ["3", "4", "5", "6"], "answer": 2},
+    {"type": "quiz", "question": "Sinonim kata 'gigih' adalah...", "options": ["Malas", "Tekun", "Ragu", "Lemah"], "answer": 1},
+    {"type": "quiz", "question": "Hasil dari 15% x 240 adalah...", "options": ["24", "30", "36", "40"], "answer": 2},
+    {"type": "match", "time": 25, "question": "Susun kepingan memori ke slot yang benar (klik 2 kepingan untuk menukar).", "slots": ["MATEMATIKA", "BAHASA", "LOGIKA"], "shards": [{"text": "Luas lingkaran = pi x r^2", "slot": 0}, {"text": "Kalimat efektif: hemat kata, tidak bertele-tele", "slot": 1}, {"text": "Jika P maka Q, P benar, maka Q benar", "slot": 2}]},
+    {"type": "quiz", "question": "Pola bilangan: 2, 4, 8, 16, ... Angka berikutnya?", "options": ["18", "24", "32", "64"], "answer": 2}
+  ]
+}
