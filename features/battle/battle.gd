@@ -1,0 +1,213 @@
+extends Control
+## NORMAL STAGE = ATURAN battle (giliran, damage, cek HP). Tampilan ada di battle_ui.
+## Quiz/puzzle ada di quiz_panel.gd; battle cuma memanggilnya dan menerima hasilnya.
+##
+## Alur (sesuai flowchart):
+##   Enter Battle -> quiz mulai -> hasil: correct / wrong / timeout (+ skip, gamble)
+##   -> damage ke musuh ATAU damage ke player -> cek HP -> soal berikutnya / level selesai
+
+const UIKit := preload("res://core/ui_kit.gd")
+const QuizPanel := preload("res://features/quiz/quiz_panel.gd")
+
+@export var intro_pause := 1.3      # jeda "musuh muncul" sebelum soal pertama
+@export var resolve_pause := 1.4    # jeda layar battle setelah jawaban (intermezzo)
+
+# "Inner thoughts" John (tema lore): muncul sebagai pesan saat gagal.
+const THOUGHTS := {
+	"wrong": ["...aku tahu ini. Kenapa malah lupa?", "Bukan itu... bukan itu jawabannya.", "Ingatanku berantakan."],
+	"timeout": ["Blank. Kepalaku kosong.", "Waktunya habis...", "Terlalu lama berpikir."],
+	"gamble_red": ["Asal tebak... dan meleset. Kepalaku pusing."],
+}
+
+@onready var ui = $BattleUI
+
+var level_data: Dictionary
+var player_hp := 0
+var player_max := 0
+var enemy_hp := 0
+var enemy_max := 0
+var enemy_dmg := 0
+var stunned := false       # kena stun (gamble gagal): soal berikutnya waktunya separuh
+var finished := false
+var quiz
+var pause_layer: ColorRect
+
+
+func _ready() -> void:
+	level_data = GameState.current_level()
+	player_max = Config.PLAYER_MAX_HP
+	player_hp = player_max
+	enemy_max = int(level_data["hp"])
+	enemy_hp = enemy_max
+	enemy_dmg = int(level_data["dmg"])
+	ui.setup(level_data["title"], Config.PLAYER_NAME, player_hp, player_max,
+			level_data["enemy"], enemy_hp, enemy_max)
+	ui.pause_pressed.connect(_on_pause)
+
+	quiz = QuizPanel.new()
+	add_child(quiz)
+	quiz.visible = false
+	quiz.answered.connect(_on_quiz_answered)
+
+	_build_pause_layer()
+	for u in GameState.owned_upgrades():
+		u.on_battle_start(self)
+	_intro()
+
+
+# ---------- alur ----------
+
+func _intro() -> void:
+	ui.set_quiz_mode(false)
+	var msg := "%s muncul!" % level_data["enemy"]
+	if GameState.notice != "":
+		msg = GameState.notice + "\n" + msg
+		GameState.notice = ""
+	ui.show_message(msg)
+	await _wait(intro_pause)
+	_start_quiz()
+
+
+func _start_quiz() -> void:
+	ui.set_quiz_mode(true)
+	var q: Dictionary = QuestionBank.get_question(GameState.level)
+	q["tag"] = level_data["subtest"]
+	var time: float = float(q.get("time", level_data["time"]))
+	for u in GameState.owned_upgrades():
+		time = u.modify_time(time)
+	var was_stunned := stunned
+	if stunned:
+		time *= 0.5
+		stunned = false
+	var options := {"stunned": was_stunned}
+	for u in GameState.owned_upgrades():
+		u.modify_quiz_options(options)
+	quiz.visible = true
+	quiz.start(q, time, options)
+
+
+## Hasil dari quiz_panel: "correct", "wrong", "timeout", "skip",
+## "gamble_green", "gamble_orange", "gamble_red".
+## Upgrade boleh menangani hasil lebih dulu (on_quiz_result); kalau tidak, pakai aturan bawaan.
+func _on_quiz_answered(result: String) -> void:
+	quiz.visible = false
+	ui.set_quiz_mode(false)
+	await _wait(0.4)   # beri waktu kartu membesar lagi
+	var handled := false
+	for u in GameState.owned_upgrades():
+		if await u.on_quiz_result(result, self):
+			handled = true
+			break
+	if not handled:
+		if result == "correct":
+			Audio.play_sfx("correct")
+			await attack_enemy(1, 1.0, "Jawaban benar! Serangan masuk.")
+		else:
+			Audio.play_sfx("wrong")
+			await hurt_player(result)
+	await _wait(resolve_pause)
+	if enemy_hp <= 0:
+		_end_level(true)
+	elif player_hp <= 0:
+		_end_level(false)
+	else:
+		_start_quiz()
+
+
+## API untuk upgrade: player menyerang musuh `hits` kali, damage = dasar x mult x modifier upgrade.
+func attack_enemy(hits: int, mult: float, msg: String) -> void:
+	ui.show_message(msg)
+	for i in hits:
+		var dmg := _calc_damage(mult)
+		enemy_hp = maxi(0, enemy_hp - dmg)
+		Audio.play_sfx("hit")
+		ui.hit("enemy", dmg)
+		ui.set_enemy_hp(enemy_hp, enemy_max)
+		await _wait(0.5)
+		if enemy_hp <= 0:
+			break
+
+
+## API untuk upgrade: musuh menyerang player. thought_key = kunci di THOUGHTS.
+## allow_dodge = false kalau serangan ini tidak boleh dihindari.
+func hurt_player(thought_key: String, allow_dodge: bool = true, extra: String = "") -> void:
+	var lines: Array = THOUGHTS.get(thought_key, THOUGHTS["wrong"])
+	var thought: String = lines[randi() % lines.size()]
+	if extra != "":
+		thought += "\n" + extra
+	if allow_dodge:
+		for u in GameState.owned_upgrades():
+			if u.should_dodge():
+				ui.show_message(thought + "\n" + u.display_name + ": John menghindar!")
+				ui.float_text("player", "DODGE!", Color(0.5, 1.0, 0.6))
+				await _wait(0.3)
+				return
+	ui.show_message(thought)
+	player_hp = maxi(0, player_hp - enemy_dmg)
+	Audio.play_sfx("hurt")
+	ui.hit("player", enemy_dmg)
+	ui.set_player_hp(player_hp, player_max)
+	await _wait(0.5)
+
+
+func _calc_damage(mult: float) -> int:
+	var d := float(Config.BASE_DAMAGE) * mult
+	for u in GameState.owned_upgrades():
+		d = u.modify_damage(d)
+	return int(round(d))
+
+
+func _end_level(won: bool) -> void:
+	finished = true
+	if won:
+		Audio.play_sfx("win")
+		ui.show_message("%s tumbang! Level selesai." % level_data["enemy"])
+	else:
+		Audio.play_sfx("lose")
+		ui.show_message("John kehabisan tenaga...")
+	await _wait(1.6)
+	GameState.finish_level(won)
+
+
+func _wait(t: float) -> void:
+	await get_tree().create_timer(t, false).timeout   # false = ikut berhenti saat pause
+
+
+# ---------- pause ----------
+
+func _on_pause() -> void:
+	if finished:
+		return
+	get_tree().paused = true
+	pause_layer.visible = true
+
+
+func _on_resume() -> void:
+	pause_layer.visible = false
+	get_tree().paused = false
+
+
+func _on_quit() -> void:
+	GameState.goto(Config.SCENE_TITLE)
+
+
+func _build_pause_layer() -> void:
+	pause_layer = ColorRect.new()
+	pause_layer.color = Color(0, 0, 0, 0.75)
+	pause_layer.process_mode = Node.PROCESS_MODE_ALWAYS
+	pause_layer.visible = false
+	add_child(pause_layer)
+	pause_layer.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	var center := CenterContainer.new()
+	pause_layer.add_child(center)
+	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	var box := VBoxContainer.new()
+	box.add_theme_constant_override("separation", 10)
+	center.add_child(box)
+	box.add_child(UIKit.make_label("PAUSED", 22))
+	var resume := UIKit.make_button("Lanjut", 14)
+	resume.pressed.connect(_on_resume)
+	box.add_child(resume)
+	var quit := UIKit.make_button("Ke Menu Utama", 14)
+	quit.pressed.connect(_on_quit)
+	box.add_child(quit)
