@@ -1,0 +1,10 @@
+{
+  "questions": [
+    {"type": "quiz", "question": "Choose the correct word: She ___ to school every day.", "options": ["go", "goes", "going", "gone"], "answer": 1},
+    {"type": "quiz", "question": "The synonym of 'rapid' is...", "options": ["slow", "fast", "weak", "quiet"], "answer": 1},
+    {"type": "quiz", "question": "Antonim kata 'kikir' adalah...", "options": ["Pelit", "Dermawan", "Hemat", "Rakus"], "answer": 1},
+    {"type": "quiz", "question": "Which sentence is correct?", "options": ["He don't like coffee.", "He doesn't likes coffee.", "He doesn't like coffee.", "He not like coffee."], "answer": 2},
+    {"type": "match", "time": 25, "question": "Susun kepingan memori ke slot yang benar.", "slots": ["SINONIM", "ANTONIM", "KATA BAKU"], "shards": [{"text": "pandai = cerdas", "slot": 0}, {"text": "tinggi >< rendah", "slot": 1}, {"text": "risiko (bukan resiko)", "slot": 2}]},
+    {"type": "quiz", "question": "Choose the correct past tense: They ___ football yesterday.", "options": ["play", "plays", "played", "playing"], "answer": 2}
+  ]
+}

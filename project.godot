@@ -11,13 +11,25 @@ config_version=5
 [application]
 
 config/name="Hands-On-GIMAPP"
+run/main_scene="res://features/title/title.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[autoload]
+
+Config="*res://core/config.gd"
+Levels="*res://core/levels.gd"
+Audio="*res://core/audio.gd"
+QuestionBank="*res://core/question_bank.gd"
+GameState="*res://core/game_state.gd"
+
 [display]
 
-window/stretch/mode="canvas_items"
-window/stretch/aspect="expand"
+window/size/viewport_width=640
+window/size/viewport_height=360
+window/size/window_width_override=1280
+window/size/window_height_override=720
+window/stretch/mode="viewport"
 
 [physics]
 

@@ -1,0 +1,10 @@
+{
+  "questions": [
+    {"type": "quiz", "question": "Semua mahasiswa rajin belajar. Budi adalah mahasiswa. Kesimpulan yang benar?", "options": ["Budi tidak rajin belajar", "Budi rajin belajar", "Semua yang rajin adalah mahasiswa", "Budi pasti lulus"], "answer": 1},
+    {"type": "quiz", "question": "Pola bilangan: 1, 1, 2, 3, 5, 8, ... Angka berikutnya?", "options": ["11", "12", "13", "14"], "answer": 2},
+    {"type": "quiz", "question": "Penulisan kata baku yang benar adalah...", "options": ["aktifitas", "aktivitas", "aktipitas", "aktivites"], "answer": 1},
+    {"type": "quiz", "question": "Ide pokok paragraf biasanya terdapat pada...", "options": ["Kalimat utama", "Kalimat penjelas", "Judul saja", "Kalimat terakhir selalu"], "answer": 0},
+    {"type": "match", "time": 25, "question": "Susun kepingan memori ke slot yang benar.", "slots": ["PENALARAN", "BAHASA", "PENGETAHUAN UMUM"], "shards": [{"text": "A adalah B, C adalah A, maka C adalah B", "slot": 0}, {"text": "Koma dipakai untuk memisahkan unsur perincian", "slot": 1}, {"text": "Pancasila ditetapkan sebagai dasar negara pada 18 Agustus 1945", "slot": 2}]},
+    {"type": "quiz", "question": "Lembaga yang berwenang menguji undang-undang terhadap UUD 1945 adalah...", "options": ["Mahkamah Agung", "Mahkamah Konstitusi", "DPR", "KPK"], "answer": 1}
+  ]
+}
