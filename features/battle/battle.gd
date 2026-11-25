@@ -36,6 +36,7 @@ var story_ui: CanvasLayer
 
 
 func _ready() -> void:
+	Audio.play_music("main") #BGM
 	level_data = GameState.current_level()
 	player_max = Config.PLAYER_MAX_HP
 	player_hp = player_max

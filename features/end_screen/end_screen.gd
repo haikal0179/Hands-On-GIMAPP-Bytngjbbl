@@ -5,6 +5,7 @@ const UIKit := preload("res://core/ui_kit.gd")
 
 
 func _ready() -> void:
+	Audio.play_music("prologue" if GameState.result == "victory" else "flashback") #BGM
 	var box := UIKit.centered_column(self, 8)
 
 	if GameState.result == "victory":

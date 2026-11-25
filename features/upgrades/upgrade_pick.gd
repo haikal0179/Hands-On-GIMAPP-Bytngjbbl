@@ -5,6 +5,7 @@ const UIKit := preload("res://core/ui_kit.gd")
 
 
 func _ready() -> void:
+	Audio.play_music("flashback") #BGM
 	var box := UIKit.centered_column(self, 8)
 
 	var tier := GameState.level + 1

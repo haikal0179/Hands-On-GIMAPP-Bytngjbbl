@@ -7,6 +7,7 @@ var credit_overlay: ColorRect
 
 
 func _ready() -> void:
+	Audio.play_music("prologue") # BGM 
 	var box := UIKit.centered_column(self, 14)
 	box.add_child(UIKit.make_label("The Ultimate UTBK", 30, Color(1.0, 0.6, 0.0)))
 	box.add_child(UIKit.make_label("WILL YOU PASS UTBK?????", 14))
