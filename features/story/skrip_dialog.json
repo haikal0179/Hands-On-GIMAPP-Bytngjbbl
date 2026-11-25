@@ -1,0 +1,199 @@
+{
+	"level_1_pre": {
+		"left_name": "JOHN UTBK",
+		"right_name": "ICHIKIWIR",
+		"left_portrait": "res://assets/art/char1.png",
+		"right_portrait": "res://assets/art/char2.png",
+		"lines": [
+			{
+				"speaker": "right",
+				"text": "Heh... baru duduk di depan komputer saja tanganmu sudah dingin begitu?",
+				"thought_title": "FIRST ENCOUNTER",
+				"thought_tex": "res://icon.svg",
+				"shake": "right"
+			},
+			{
+				"speaker": "left",
+				"text": "Cuma gugup awal. Begitu layar soal kebuka, aku bakal langsung panas.",
+				"thought_title": "DEEP BREATH",
+				"thought_tex": "res://icon.svg"
+			},
+			{
+				"speaker": "right",
+				"text": "Buktikan saja. Jangan sampai baru nomor satu kepalamu sudah mendadak kosong!",
+				"thought_title": "BATTLE START",
+				"thought_tex": "res://icon.svg",
+				"shake": "all"
+			}
+		]
+	},
+	"level_1_post": {
+		"left_name": "JOHN UTBK",
+		"right_name": "ICHIKIWIR",
+		"left_portrait": "res://assets/art/char1.png",
+		"right_portrait": "res://assets/art/char2.png",
+		"lines": [
+			{
+				"speaker": "right",
+				"text": "Cih... lumayan juga refleks otakmu. Baru pemanasan sudah berani ngebut.",
+				"thought_title": "ENEMY SHAKEN",
+				"thought_tex": "res://icon.svg",
+				"shake": "right"
+			},
+			{
+				"speaker": "left",
+				"text": "Satu rintangan lewat. Tapi rasanya tekanan di ruangan ini baru saja dimulai...",
+				"thought_title": "STAGE CLEAR",
+				"thought_tex": "res://icon.svg"
+			}
+		]
+	},
+	"level_2_pre": {
+		"left_name": "JOHN UTBK",
+		"right_name": "ICHIKIWIR II",
+		"left_portrait": "res://assets/art/char1.png",
+		"right_portrait": "res://assets/art/char2.png",
+		"lines": [
+			{
+				"speaker": "right",
+				"text": "Kelihatannya kamu mulai pede, ya? Sini kubuat semua materi hafalanmu terasa asing.",
+				"thought_title": "MIND FOG",
+				"thought_tex": "res://icon.svg",
+				"shake": "thought"
+			},
+			{
+				"speaker": "left",
+				"text": "Tunggu... padahal semalam baru kubaca, kenapa mendadak samar begini?!",
+				"thought_title": "MEMORY SLIP",
+				"thought_tex": "res://icon.svg",
+				"shake": "left"
+			},
+			{
+				"speaker": "right",
+				"text": "Ayo ragu! Ayo ganti jawabanmu di detik terakhir!",
+				"thought_title": "DOUBT",
+				"thought_tex": "res://icon.svg"
+			}
+		]
+	},
+	"level_2_post": {
+		"left_name": "JOHN UTBK",
+		"right_name": "ICHIKIWIR II",
+		"left_portrait": "res://assets/art/char1.png",
+		"right_portrait": "res://assets/art/char2.png",
+		"lines": [
+			{
+				"speaker": "right",
+				"text": "Gila... bahkan saat ingatanmu goyang, instingmu masih sempat mengunci jawaban yang benar!",
+				"thought_title": "BROKEN ILLUSION",
+				"thought_tex": "res://icon.svg",
+				"shake": "right"
+			},
+			{
+				"speaker": "left",
+				"text": "Hampir saja ketipu opsi pengecoh. Jangan sampai hilang fokus lagi.",
+				"thought_title": "RECOVERED",
+				"thought_tex": "res://icon.svg"
+			}
+		]
+	},
+	"level_3_pre": {
+		"left_name": "JOHN UTBK",
+		"right_name": "ICHIKIWIR III",
+		"left_portrait": "res://assets/art/char1.png",
+		"right_portrait": "res://assets/art/char2.png",
+		"lines": [
+			{
+				"speaker": "right",
+				"text": "Dengar detak waktu itu? Kafeinmu mulai habis, matamu mulai perih, dan soal makin tidak masuk akal.",
+				"thought_title": "WARNING",
+				"thought_tex": "res://icon.svg",
+				"shake": "all"
+			},
+			{
+				"speaker": "left",
+				"text": "Kepalaku mulai berat... tapi kalau berhenti mikir sekarang, semua latihan kemarin sia-sia.",
+				"thought_title": "OVERLOAD",
+				"thought_tex": "res://icon.svg",
+				"shake": "left"
+			},
+			{
+				"speaker": "right",
+				"text": "Menyerah saja! Pencet asal, tutup mata, dan berdoa!",
+				"thought_title": "PANIC MODE",
+				"thought_tex": "res://icon.svg",
+				"shake": "right"
+			}
+		]
+	},
+	"level_3_post": {
+		"left_name": "JOHN UTBK",
+		"right_name": "ICHIKIWIR III",
+		"left_portrait": "res://assets/art/char1.png",
+		"right_portrait": "res://assets/art/char2.png",
+		"lines": [
+			{
+				"speaker": "right",
+				"text": "Mustahil... di bawah tekanan separah itu kau masih bisa berpikir jernih?!",
+				"thought_title": "CRITICAL HIT",
+				"thought_tex": "res://icon.svg",
+				"shake": "right"
+			},
+			{
+				"speaker": "left",
+				"text": "Fuh... napas dulu. Tinggal satu langkah lagi sebelum bel selesai berbunyi.",
+				"thought_title": "CLUTCH",
+				"thought_tex": "res://icon.svg"
+			}
+		]
+	},
+	"level_4_pre": {
+		"left_name": "JOHN UTBK",
+		"right_name": "THE FINAL EXAM",
+		"left_portrait": "res://assets/art/char1.png",
+		"right_portrait": "res://assets/art/char2.png",
+		"lines": [
+			{
+				"speaker": "right",
+				"text": "Inilah titik penentuannya, John. Satu kesalahan kecil di sini akan menghapus seluruh perjuanganmu.",
+				"thought_title": "FINAL ENCOUNTER",
+				"thought_tex": "res://icon.svg",
+				"shake": "all"
+			},
+			{
+				"speaker": "left",
+				"text": "Biar saja. Mau soalnya seabsurd apa pun, aku tidak akan keluar dari ruangan ini dengan penyesalan.",
+				"thought_title": "FULL FOCUS",
+				"thought_tex": "res://icon.svg"
+			},
+			{
+				"speaker": "right",
+				"text": "TUNJUKKAN APAKAH KAU LAYAK LOLOS HARI INI!",
+				"thought_title": "ULTIMATE UTBK",
+				"thought_tex": "res://icon.svg",
+				"shake": "all"
+			}
+		]
+	},
+	"level_4_post": {
+		"left_name": "JOHN UTBK",
+		"right_name": "THE FINAL EXAM",
+		"left_portrait": "res://assets/art/char1.png",
+		"right_portrait": "res://assets/art/char2.png",
+		"lines": [
+			{
+				"speaker": "right",
+				"text": "Waktu habis... sistem ujian terkunci. Kau benar-benar bertahan sampai detik terakhir.",
+				"thought_title": "EXAM LOCKED",
+				"thought_tex": "res://icon.svg"
+			},
+			{
+				"speaker": "left",
+				"text": "Selesai... akhirnya selesai! Apa pun hasilnya nanti, aku sudah kasih yang terbaik!",
+				"thought_title": "VICTORY",
+				"thought_tex": "res://icon.svg",
+				"shake": "thought"
+			}
+		]
+	}
+}

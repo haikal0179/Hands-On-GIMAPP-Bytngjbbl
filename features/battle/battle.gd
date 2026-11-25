@@ -8,6 +8,7 @@ extends Control
 
 const UIKit := preload("res://core/ui_kit.gd")
 const QuizPanel := preload("res://features/quiz/quiz_panel.gd")
+const DialogueScene := preload("res://features/story/dialogue.tscn")
 
 @export var intro_pause := 1.3      # jeda "musuh muncul" sebelum soal pertama
 @export var resolve_pause := 1.4    # jeda layar battle setelah jawaban (intermezzo)
@@ -31,6 +32,7 @@ var stunned := false       # kena stun (gamble gagal): soal berikutnya waktunya 
 var finished := false
 var quiz
 var pause_layer: ColorRect
+var story_ui: CanvasLayer
 
 
 func _ready() -> void:
@@ -50,6 +52,10 @@ func _ready() -> void:
 	quiz.answered.connect(_on_quiz_answered)
 
 	_build_pause_layer()
+	
+	story_ui = DialogueScene.instantiate()
+	add_child(story_ui)
+	
 	for u in GameState.owned_upgrades():
 		u.on_battle_start(self)
 	_intro()
@@ -65,6 +71,7 @@ func _intro() -> void:
 		GameState.notice = ""
 	ui.show_message(msg)
 	await _wait(intro_pause)
+	await story_ui.play_story("level_%d_pre" % (GameState.level + 1))
 	_start_quiz()
 
 
@@ -162,10 +169,12 @@ func _end_level(won: bool) -> void:
 	if won:
 		Audio.play_sfx("win")
 		ui.show_message("%s tumbang! Level selesai." % level_data["enemy"])
+		await _wait(1.6)
+		await story_ui.play_story("level_%d_post" % (GameState.level + 1))
 	else:
 		Audio.play_sfx("lose")
 		ui.show_message("John kehabisan tenaga...")
-	await _wait(1.6)
+		await _wait(1.6)
 	GameState.finish_level(won)
 
 
@@ -176,7 +185,7 @@ func _wait(t: float) -> void:
 # ---------- pause ----------
 
 func _on_pause() -> void:
-	if finished:
+	if finished or (story_ui and story_ui.is_active):
 		return
 	get_tree().paused = true
 	pause_layer.visible = true
