@@ -1,3 +1,26 @@
 # Godot 4+ specific ignores
 .godot/
 /android/
+.nogit/
+*.translation
+
+# Build output
+builds/
+export/
+*.exe
+*.pck
+*.apk
+*.aab
+*.dmg
+*.zip
+
+# Local settings (add back export_presets.cfg if you want to share it; it must not contain keys/passwords)
+export_presets.cfg
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.tmp
+.vscode/
+.idea/
+__pycache__/
