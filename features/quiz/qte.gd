@@ -8,7 +8,7 @@ const UIKit := preload("res://core/ui_kit.gd")
 signal stopped(outcome: String)
 
 const SPEED := 0.9      # kecepatan penanda (lebar bar per detik)
-const WIDTH := 440.0
+const WIDTH := 400.0
 const GREEN := Vector2(0.42, 0.58)
 const ORANGE := Vector2(0.30, 0.70)
 

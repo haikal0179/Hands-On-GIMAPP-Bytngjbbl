@@ -6,9 +6,16 @@ const QuestionTypes := preload("res://features/quiz/question_types/registry.gd")
 
 const TIMER_FRAME_PATH := "res://assets/art/ui/timer/Timer_bar.png"
 const TIMER_FILL_PATH := "res://assets/art/ui/timer/Timer_filling.png"
-const TIMER_SCALE := 0.45
+const TIMER_SCALE := 0.42
 const TIMER_POS := Vector2(116,284)
 const TIMER_LABEL_X := 70.0
+
+# Area teks di papan soal (layar 640x360). Papan digambar battle_ui: x 96-550, y 46-310.
+# Bar jawaban dari artist mulai di y=112, jadi teks soal harus muat di y 50-110.
+const TEXT_X := 117.0
+const TEXT_W := 412.0
+const ACTIONS_POS := Vector2(130, 261)   # tombol upgrade (skip, tebak) di bawah bar jawaban
+const ACTIONS_MAX_W := 320.0             # jangan sampai menabrak namecard musuh di kanan-bawah
 
 signal answered(result: String)
 
@@ -21,8 +28,8 @@ var time_left := 0.0
 var handler = null
 var qte = null
 
-var panel: Panel
-var content: VBoxContainer
+var header: VBoxContainer   # tag subtes + teks soal
+var body: Control           # tempat bar jawaban / kartu / QTE / tombol aksi (posisi absolut, seukuran layar)
 var time_bar: Range
 
 
@@ -30,16 +37,19 @@ func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 
-	panel = Panel.new()
-	panel.position = Vector2(70, 76)
-	panel.size = Vector2(500, 196)
-	add_child(panel)
+	# Papannya sendiri digambar battle_ui (quiz_board). Di sini hanya isinya.
+	header = VBoxContainer.new()
+	header.position = Vector2(TEXT_X, 50)
+	header.size = Vector2(TEXT_W, 60)
+	header.add_theme_constant_override("separation", 2)
+	header.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(header)
 
-	content = VBoxContainer.new()
-	content.position = Vector2(12, 8)
-	content.size = Vector2(476, 180)
-	content.add_theme_constant_override("separation", 5)
-	panel.add_child(content)
+	body = Control.new()
+	body.position = Vector2.ZERO
+	body.size = Vector2(640, 360)
+	body.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(body)
 
 	_build_timer_bar()
 
@@ -139,21 +149,20 @@ func start(question: Dictionary, time: float, options: Dictionary) -> void:
 	running = true
 	qte = null
 	handler = null
-	for c in content.get_children():
-		c.queue_free()
+	_clear_ui()
 
 	var tag := str(q.get("tag", ""))
 	if opts.get("stunned", false):
 		tag += "   [STUN: half time]"
 	var tag_label := UIKit.make_label(tag, 10, Color(1, 0.8, 0.3))
 	tag_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	content.add_child(tag_label)
+	header.add_child(tag_label)
 
-	var ql := UIKit.make_label(str(q.get("question", "")), 12, Color.WHITE, 470.0)
+	# Kalau soal punya gambar, gambarnya di kanan-atas papan dan teks soal dipersempit
+	var has_image := _add_image()
+	var ql := UIKit.make_label(str(q.get("question", "")), 12, Color.WHITE, TEXT_W - (76.0 if has_image else 0.0))
 	ql.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	content.add_child(ql)
-
-	_add_image()
+	header.add_child(ql)
 
 	handler = QuestionTypes.create(str(q.get("type", "quiz")))
 	if handler == null:
@@ -162,20 +171,30 @@ func start(question: Dictionary, time: float, options: Dictionary) -> void:
 		return
 	handler.resolved.connect(_on_handler_resolved)
 	handler.timer_stopped.connect(func() -> void: running = false)
-	handler.build(content, q, opts)
+	handler.build(body, q, opts)
 	_build_actions()
 
 
-func _add_image() -> void:
+func _clear_ui() -> void:
+	for c in header.get_children():
+		c.queue_free()
+	for c in body.get_children():
+		c.queue_free()
+
+
+func _add_image() -> bool:
 	var path := str(q.get("image", ""))
 	if path == "" or not ResourceLoader.exists(path):
-		return
+		return false
 	var img := TextureRect.new()
 	img.texture = load(path)
-	img.custom_minimum_size = Vector2(0, 64)
+	img.position = Vector2(TEXT_X + TEXT_W - 68.0, 50)
+	img.size = Vector2(68, 56)
 	img.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	img.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	content.add_child(img)
+	img.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	body.add_child(img)
+	return true
 
 
 func _on_handler_resolved(outcome: String) -> void:
@@ -189,8 +208,10 @@ func _build_actions() -> void:
 	if actions.is_empty():
 		return
 	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 8)
-	content.add_child(row)
+	row.position = ACTIONS_POS
+	row.size = Vector2(ACTIONS_MAX_W, 22)
+	row.add_theme_constant_override("separation", 6)
+	body.add_child(row)
 	for a in actions:
 		var b := UIKit.make_button(str(a.get("label", "?")), 10)
 		b.pressed.connect(_on_action.bind(str(a.get("result", ""))))
@@ -207,11 +228,15 @@ func _on_action(outcome: String) -> void:
 
 
 func _start_qte() -> void:
-	for c in content.get_children():
-		c.queue_free()
+	_clear_ui()
 	qte = Qte.new()
 	qte.stopped.connect(_on_qte_stopped)
-	qte.build(content)
+	var box := VBoxContainer.new()
+	box.position = Vector2(TEXT_X, 70)
+	box.size = Vector2(TEXT_W, 170)
+	box.add_theme_constant_override("separation", 6)
+	body.add_child(box)
+	qte.build(box)
 
 
 func _on_qte_stopped(outcome: String) -> void:
