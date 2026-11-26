@@ -14,7 +14,7 @@ const QUESTIONS_DIR := "res://data/questions"          # level_1.json ... level_
 
 # ---- player ----
 const PLAYER_NAME := "TheO"
-const PLAYER_MAX_HP := 180
+const PLAYER_MAX_HP := 120
 const BASE_DAMAGE := 40
 
 ## UNTUK TES: isi id upgrade supaya langsung dimiliki tiap run, mis. ["picked_c", "typo_spotted"].

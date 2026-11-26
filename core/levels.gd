@@ -5,9 +5,9 @@ extends Node
 
 const ALL: Array = [
 	{"title": "Test 1", "subtest": "TO", "enemy": "TyO", "hp": 160, "dmg": 30, "time": 15.0},
-	{"title": "Test 2", "subtest": "PU-PPUBM", "enemy": "Anum", "hp": 200, "dmg": 35, "time": 15.0},
-	{"title": "Test 3", "subtest": "LBI-LBE", "enemy": "Lita", "hp": 240, "dmg": 40, "time": 15.0},
-	{"title": "UTBK", "subtest": "PK-PM", "enemy": "Tika", "hp": 480, "dmg": 60, "time": 12.0},
+	{"title": "Test 2", "subtest": "PU-PPUBM", "enemy": "Anum", "hp": 160, "dmg": 35, "time": 15.0},
+	{"title": "Test 3", "subtest": "LBI-LBE", "enemy": "Lita", "hp": 200, "dmg": 40, "time": 15.0},
+	{"title": "UTBK", "subtest": "PK-PM", "enemy": "Tika", "hp": 300, "dmg": 60, "time": 12.0},
 ]
 
 
