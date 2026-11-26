@@ -186,7 +186,7 @@ func _wait(t: float) -> void:
 # ---------- pause ----------
 
 func _on_pause() -> void:
-	if finished or (story_ui and story_ui.is_active):
+	if finished:
 		return
 	get_tree().paused = true
 	pause_layer.visible = true
@@ -198,15 +198,26 @@ func _on_resume() -> void:
 
 
 func _on_quit() -> void:
+	get_tree().paused = false
 	GameState.goto(Config.SCENE_TITLE)
 
 
 func _build_pause_layer() -> void:
+	var pause_canvas := CanvasLayer.new()
+	pause_canvas.layer = 30
+	pause_canvas.process_mode = Node.PROCESS_MODE_ALWAYS
+	add_child(pause_canvas)
+	
+	for btn in ui.find_children("*", "BaseButton", true, false):
+		btn.reparent(pause_canvas)
+		if not btn.pressed.is_connected(_on_pause):
+			btn.pressed.connect(_on_pause)
+	
 	pause_layer = ColorRect.new()
 	pause_layer.color = Color(0, 0, 0, 0.75)
 	pause_layer.process_mode = Node.PROCESS_MODE_ALWAYS
 	pause_layer.visible = false
-	add_child(pause_layer)
+	pause_canvas.add_child(pause_layer)
 	pause_layer.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	var center := CenterContainer.new()
 	pause_layer.add_child(center)

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://p3nblhxg8hy4"
-path="res://.godot/imported/char1.png-6c079324d78b1894c5902fb83ad24449.ctex"
+uid="uid://cq52ql2a0f5m4"
+path="res://.godot/imported/QuizLita_filling.png-c5c07a5871f3be6ddb876248f59249c2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/art/char1.png"
-dest_files=["res://.godot/imported/char1.png-6c079324d78b1894c5902fb83ad24449.ctex"]
+source_file="res://assets/art/ui/namecards/Quiz mode (smaller)/Lita/QuizLita_filling.png"
+dest_files=["res://.godot/imported/QuizLita_filling.png-c5c07a5871f3be6ddb876248f59249c2.ctex"]
 
 [params]
 

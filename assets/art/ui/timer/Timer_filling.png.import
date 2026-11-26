@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://vagetpduc107"
-path="res://.godot/imported/hi.jpg-4c6c0c8031f7b9ef827035a2f6d5ab06.ctex"
+uid="uid://6hxhhb7pqcck"
+path="res://.godot/imported/Timer_filling.png-1cf8118df018af1831efbb0f12067d92.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/art/hi.jpg"
-dest_files=["res://.godot/imported/hi.jpg-4c6c0c8031f7b9ef827035a2f6d5ab06.ctex"]
+source_file="res://assets/art/ui/timer/Timer_filling.png"
+dest_files=["res://.godot/imported/Timer_filling.png-1cf8118df018af1831efbb0f12067d92.ctex"]
 
 [params]
 

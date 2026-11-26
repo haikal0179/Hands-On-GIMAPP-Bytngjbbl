@@ -14,7 +14,6 @@ signal dialogue_finished
 @onready var thought_frame: PanelContainer = $RootUI/MainMargin/MainVBox/TopSection/CenterThoughtBox/ThoughtImageFrame
 @onready var thought_image: TextureRect = $RootUI/MainMargin/MainVBox/TopSection/CenterThoughtBox/ThoughtImageFrame/ThoughtImage
 @onready var dialogue_text: RichTextLabel = $RootUI/MainMargin/MainVBox/BottomSection/DialogueText
-@onready var pause_button: Button = %PauseButton
 
 @export var typing_speed: float = 0.03
 @export var default_json_path: String = "res://features/story/skrip_dialog.json"
@@ -28,7 +27,6 @@ var left_style: StyleBoxFlat
 var right_style: StyleBoxFlat
 var left_name_label: Label
 var right_name_label: Label
-var pause_overlay: ColorRect
 
 var dialogue_lines: Array = []
 var current_index: int = 0
@@ -36,7 +34,6 @@ var typing_tween: Tween
 var shake_tweens: Dictionary = {}
 var orig_positions: Dictionary = {}
 var is_active: bool = false
-var is_paused: bool = false
 
 
 func _ready() -> void:
@@ -44,30 +41,28 @@ func _ready() -> void:
 	hide()
 	_fit_to_viewport()
 	
-	# Backdrop gelap menutupi seluruh layar agar UI battle di belakang tidak menabrak teks
 	background.color = Color(0.04, 0.045, 0.07, 1.0)
-	var divider := ColorRect.new()
-	divider.color = Color(0.2, 0.25, 0.32, 1.0)
-	divider.custom_minimum_size = Vector2(0, 2)
-	main_vbox.add_child(divider)
-	main_vbox.move_child(divider, 1)
-	
+	root_ui.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	background.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	main_margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	dialogue_text.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	pause_button.mouse_filter = Control.MOUSE_FILTER_STOP
-	pause_button.focus_mode = Control.FOCUS_NONE
 	
 	left_style = left_frame.get_theme_stylebox("panel").duplicate()
 	right_style = right_frame.get_theme_stylebox("panel").duplicate()
 	left_frame.add_theme_stylebox_override("panel", left_style)
 	right_frame.add_theme_stylebox_override("panel", right_style)
 	
-	# Pasang label nama otomatis di bawah potret kiri & kanan
 	left_name_label = _attach_name_label(left_frame, "JOHN UTBK")
 	right_name_label = _attach_name_label(right_frame, "MUSUH")
 	
-	_build_pause_overlay()
-	pause_button.pressed.connect(_on_pause_pressed)
+	var top_section := $RootUI/MainMargin/MainVBox/TopSection
+	top_section.alignment = BoxContainer.ALIGNMENT_CENTER
+	left_frame.get_parent().size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	right_frame.get_parent().size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	thought_title.get_parent().size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	
+	left_portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	right_portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 
 
 func _fit_to_viewport() -> void:
@@ -89,6 +84,11 @@ func _attach_name_label(frame: Control, default_text: String) -> Label:
 	col.add_theme_constant_override("separation", 10)
 	parent.add_child(col)
 	parent.move_child(col, idx)
+	
+	var top_spacer := Control.new()
+	top_spacer.custom_minimum_size = Vector2(0, 34)
+	col.add_child(top_spacer)
+	
 	frame.reparent(col, false)
 	
 	var lbl := Label.new()
@@ -97,45 +97,6 @@ func _attach_name_label(frame: Control, default_text: String) -> Label:
 	lbl.add_theme_font_size_override("font_size", 20)
 	col.add_child(lbl)
 	return lbl
-
-
-func _build_pause_overlay() -> void:
-	pause_overlay = ColorRect.new()
-	pause_overlay.color = Color(0.0, 0.0, 0.0, 0.82)
-	pause_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	pause_overlay.hide()
-	root_ui.add_child(pause_overlay)
-	
-	var center := CenterContainer.new()
-	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	pause_overlay.add_child(center)
-	
-	var vbox := VBoxContainer.new()
-	vbox.add_theme_constant_override("separation", 16)
-	center.add_child(vbox)
-	
-	var title := Label.new()
-	title.text = "DIALOG DIJEDA"
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.add_theme_font_size_override("font_size", 26)
-	title.add_theme_color_override("font_color", BORDER_ACTIVE)
-	vbox.add_child(title)
-	
-	var resume_btn := Button.new()
-	resume_btn.text = "LANJUTKAN"
-	resume_btn.custom_minimum_size = Vector2(240, 48)
-	resume_btn.focus_mode = Control.FOCUS_NONE
-	resume_btn.add_theme_font_size_override("font_size", 18)
-	resume_btn.pressed.connect(_on_resume_pressed)
-	vbox.add_child(resume_btn)
-	
-	var skip_btn := Button.new()
-	skip_btn.text = "LEWATI DIALOG"
-	skip_btn.custom_minimum_size = Vector2(240, 48)
-	skip_btn.focus_mode = Control.FOCUS_NONE
-	skip_btn.add_theme_font_size_override("font_size", 18)
-	skip_btn.pressed.connect(_on_skip_pressed)
-	vbox.add_child(skip_btn)
 
 
 func play_story(dialogue_id: String, json_path: String = default_json_path) -> void:
@@ -177,17 +138,13 @@ func start_dialogue(lines: Array, left_tex: Texture2D = null, right_tex: Texture
 		return
 	
 	if left_tex != null:
-		left_portrait.texture = left_tex
+		left_portrait.texture = _make_bust_portrait(left_tex, true)
 	if right_tex != null:
-		right_portrait.texture = right_tex
+		right_portrait.texture = _make_bust_portrait(right_tex, false)
 		
 	dialogue_lines = lines
 	current_index = 0
 	is_active = true
-	is_paused = false
-	pause_overlay.hide()
-	pause_button.show()
-	pause_button.text = "||"
 	
 	root_ui.modulate.a = 0.0
 	show()
@@ -282,15 +239,8 @@ func _trigger_shake(target_name: String, intensity: float = 8.0) -> void:
 	shake_tween.tween_property(target, "position", base_pos, 0.04)
 
 
-func _input(event: InputEvent) -> void:
-	if not is_active:
-		return
-	
-	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-		if pause_button.get_global_rect().has_point(event.position):
-			return
-	
-	if is_paused:
+func _unhandled_input(event: InputEvent) -> void:
+	if not is_active or get_tree().paused:
 		return
 		
 	var is_next_pressed: bool = event.is_action_pressed("ui_accept") or (
@@ -314,37 +264,21 @@ func _advance_dialogue() -> void:
 	if current_index < dialogue_lines.size():
 		_show_current_line()
 	else:
-		_close_dialogue()
+		is_active = false
+		var close_tween := create_tween()
+		close_tween.tween_property(root_ui, "modulate:a", 0.0, 0.25)
+		await close_tween.finished
+		hide()
+		dialogue_finished.emit()
 
 
-func _close_dialogue() -> void:
-	is_active = false
-	var close_tween := create_tween()
-	close_tween.tween_property(root_ui, "modulate:a", 0.0, 0.25)
-	await close_tween.finished
-	hide()
-	dialogue_finished.emit()
-
-
-func _on_pause_pressed() -> void:
-	is_paused = true
-	if typing_tween and typing_tween.is_running():
-		typing_tween.pause()
-	pause_button.hide()
-	pause_overlay.show()
-
-
-func _on_resume_pressed() -> void:
-	is_paused = false
-	pause_overlay.hide()
-	pause_button.show()
-	if typing_tween:
-		typing_tween.play()
-
-
-func _on_skip_pressed() -> void:
-	is_paused = false
-	pause_overlay.hide()
-	if typing_tween and typing_tween.is_running():
-		typing_tween.kill()
-	_close_dialogue()
+func _make_bust_portrait(tex: Texture2D, is_player: bool) -> Texture2D:
+	if tex == null:
+		return null
+	var w := tex.get_width()
+	var h := tex.get_height()
+	var atlas := AtlasTexture.new()
+	atlas.atlas = tex
+	var offset_x := w * 0.04 if is_player else w * 0.14
+	atlas.region = Rect2(offset_x, h * 0.03, w * 0.72, h * 0.62)
+	return atlas

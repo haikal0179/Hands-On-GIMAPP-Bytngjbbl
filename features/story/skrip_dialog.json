@@ -1,9 +1,9 @@
 {
 	"level_1_pre": {
-		"left_name": "JOHN UTBK",
-		"right_name": "ICHIKIWIR",
-		"left_portrait": "res://assets/art/char1.png",
-		"right_portrait": "res://assets/art/char2.png",
+		"left_name": "TheO",
+		"right_name": "TYO",
+		"left_portrait": "res://assets/art/char/TheO Idle.png",
+		"right_portrait": "res://assets/art/char/TyO (TO) Idle.png",
 		"lines": [
 			{
 				"speaker": "right",
@@ -28,10 +28,10 @@
 		]
 	},
 	"level_1_post": {
-		"left_name": "JOHN UTBK",
-		"right_name": "ICHIKIWIR",
-		"left_portrait": "res://assets/art/char1.png",
-		"right_portrait": "res://assets/art/char2.png",
+		"left_name": "TheO",
+		"right_name": "TYO",
+		"left_portrait": "res://assets/art/char/TheO Idle.png",
+		"right_portrait": "res://assets/art/char/TyO (TO) Idle.png",
 		"lines": [
 			{
 				"speaker": "right",
@@ -49,10 +49,10 @@
 		]
 	},
 	"level_2_pre": {
-		"left_name": "JOHN UTBK",
-		"right_name": "ICHIKIWIR II",
-		"left_portrait": "res://assets/art/char1.png",
-		"right_portrait": "res://assets/art/char2.png",
+		"left_name": "TheO",
+		"right_name": "ANUM",
+		"left_portrait": "res://assets/art/char/TheO Idle.png",
+		"right_portrait": "res://assets/art/char/Anum (PU) Idle.png",
 		"lines": [
 			{
 				"speaker": "right",
@@ -77,10 +77,10 @@
 		]
 	},
 	"level_2_post": {
-		"left_name": "JOHN UTBK",
-		"right_name": "ICHIKIWIR II",
-		"left_portrait": "res://assets/art/char1.png",
-		"right_portrait": "res://assets/art/char2.png",
+		"left_name": "TheO",
+		"right_name": "ANUM",
+		"left_portrait": "res://assets/art/char/TheO Idle.png",
+		"right_portrait": "res://assets/art/char/Anum (PU) Idle.png",
 		"lines": [
 			{
 				"speaker": "right",
@@ -98,10 +98,10 @@
 		]
 	},
 	"level_3_pre": {
-		"left_name": "JOHN UTBK",
-		"right_name": "ICHIKIWIR III",
-		"left_portrait": "res://assets/art/char1.png",
-		"right_portrait": "res://assets/art/char2.png",
+		"left_name": "TheO",
+		"right_name": "LITA",
+		"left_portrait": "res://assets/art/char/TheO Idle.png",
+		"right_portrait": "res://assets/art/char/Lita (LBILBE) Idle.png",
 		"lines": [
 			{
 				"speaker": "right",
@@ -127,10 +127,10 @@
 		]
 	},
 	"level_3_post": {
-		"left_name": "JOHN UTBK",
-		"right_name": "ICHIKIWIR III",
-		"left_portrait": "res://assets/art/char1.png",
-		"right_portrait": "res://assets/art/char2.png",
+		"left_name": "TheO",
+		"right_name": "LITA",
+		"left_portrait": "res://assets/art/char/TheO Idle.png",
+		"right_portrait": "res://assets/art/char/Lita (LBILBE) Idle.png",
 		"lines": [
 			{
 				"speaker": "right",
@@ -148,10 +148,10 @@
 		]
 	},
 	"level_4_pre": {
-		"left_name": "JOHN UTBK",
-		"right_name": "THE FINAL EXAM",
-		"left_portrait": "res://assets/art/char1.png",
-		"right_portrait": "res://assets/art/char2.png",
+		"left_name": "TheO",
+		"right_name": "TIKA",
+		"left_portrait": "res://assets/art/char/TheO Idle.png",
+		"right_portrait": "res://assets/art/char/Tika (PKPM) Idle.png",
 		"lines": [
 			{
 				"speaker": "right",
@@ -176,10 +176,10 @@
 		]
 	},
 	"level_4_post": {
-		"left_name": "JOHN UTBK",
-		"right_name": "THE FINAL EXAM",
-		"left_portrait": "res://assets/art/char1.png",
-		"right_portrait": "res://assets/art/char2.png",
+		"left_name": "TheO",
+		"right_name": "TIKA",
+		"left_portrait": "res://assets/art/char/TheO Idle.png",
+		"right_portrait": "res://assets/art/char/Tika (PKPM) Idle.png",
 		"lines": [
 			{
 				"speaker": "right",

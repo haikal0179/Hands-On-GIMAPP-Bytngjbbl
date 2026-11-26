@@ -28,9 +28,9 @@ enum State { INTRO, QUIZ, RESOLVING, FINISHED }
 
 # Enemies are fought in order. Add/remove lines to change the stage.
 var enemies: Array = [
-	{"name": "Ichikiwir", "hp": 220, "damage": 25},
-	{"name": "Ichikiwir II", "hp": 260, "damage": 30},
-	{"name": "Ichikiwir III", "hp": 300, "damage": 35},
+	{"name": "TyO", "hp": 220, "damage": 25},
+	{"name": "Anum", "hp": 260, "damage": 30},
+	{"name": "Lita", "hp": 300, "damage": 35},
 ]
 
 var player_hp: int
