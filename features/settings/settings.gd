@@ -1,7 +1,11 @@
 extends Control
 
+signal closed
+
 const UIKit := preload("res://core/ui_kit.gd")
 const CLOSE_ICON := preload("res://assets/art/button/Close button.png")
+
+@export var close_to_main_menu := true
 
 var volume_slider: HSlider
 var volume_value_label: Label
@@ -37,8 +41,15 @@ func _ready() -> void:
 		Vector2(-64.0, 16.0)
 	)
 	close_button.tooltip_text = "Back to Menu"
-	close_button.pressed.connect(func() -> void: GameState.goto(Config.SCENE_TITLE))
+	close_button.pressed.connect(_on_close_pressed)
 	add_child(close_button)
+
+
+func _on_close_pressed() -> void:
+	if close_to_main_menu:
+		GameState.goto(Config.SCENE_TITLE)
+	else:
+		closed.emit()
 
 
 func _on_volume_changed(value: float) -> void:

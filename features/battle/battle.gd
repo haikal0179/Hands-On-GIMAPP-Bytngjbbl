@@ -9,6 +9,10 @@ extends Control
 const UIKit := preload("res://core/ui_kit.gd")
 const QuizPanel := preload("res://features/quiz/quiz_panel.gd")
 const DialogueScene := preload("res://features/story/dialogue.tscn")
+const SettingsScene := preload("res://features/settings/settings.tscn")
+const EXIT_BUTTON_ICON := preload("res://assets/art/button/Exit button.png")
+const SETTINGS_BUTTON_ICON := preload("res://assets/art/button/Settings button.png")
+const RESUME_BUTTON_ICON := preload("res://assets/art/button/Play button.png")
 
 @export var intro_pause := 1.3      # jeda "musuh muncul" sebelum soal pertama
 @export var resolve_pause := 1.4    # jeda layar battle setelah jawaban (intermezzo)
@@ -32,6 +36,8 @@ var stunned := false       # kena stun (gamble gagal): soal berikutnya waktunya 
 var finished := false
 var quiz
 var pause_layer: ColorRect
+var pause_canvas: CanvasLayer
+var pause_settings: Control
 var story_ui: CanvasLayer
 
 
@@ -53,6 +59,7 @@ func _ready() -> void:
 	quiz.answered.connect(_on_quiz_answered)
 
 	_build_pause_layer()
+	pause_canvas.get_node("PauseButton").escape_pressed.connect(_on_escape_pressed)
 	
 	story_ui = DialogueScene.instantiate()
 	add_child(story_ui)
@@ -199,6 +206,33 @@ func _on_resume() -> void:
 	get_tree().paused = false
 
 
+func _on_escape_pressed() -> void:
+	if pause_settings != null:
+		_on_pause_settings_closed()
+	elif get_tree().paused:
+		_on_resume()
+	else:
+		_on_pause()
+
+
+func _on_pause_settings() -> void:
+	if pause_settings != null:
+		return
+
+	pause_layer.hide()
+	pause_settings = SettingsScene.instantiate()
+	pause_settings.set("close_to_main_menu", false)
+	pause_settings.connect("closed", _on_pause_settings_closed)
+	pause_canvas.add_child(pause_settings)
+
+
+func _on_pause_settings_closed() -> void:
+	if pause_settings != null:
+		pause_settings.queue_free()
+		pause_settings = null
+	pause_layer.show()
+
+
 func _on_quit() -> void:
 	get_tree().paused = false
 	Audio.set_music_ducked(false)
@@ -206,7 +240,7 @@ func _on_quit() -> void:
 
 
 func _build_pause_layer() -> void:
-	var pause_canvas := CanvasLayer.new()
+	pause_canvas = CanvasLayer.new()
 	pause_canvas.layer = 30
 	pause_canvas.process_mode = Node.PROCESS_MODE_ALWAYS
 	add_child(pause_canvas)
@@ -229,9 +263,23 @@ func _build_pause_layer() -> void:
 	box.add_theme_constant_override("separation", 10)
 	center.add_child(box)
 	box.add_child(UIKit.make_label("PAUSED", 22))
-	var resume := UIKit.make_button("Resume", 14)
-	resume.pressed.connect(_on_resume)
-	box.add_child(resume)
-	var quit := UIKit.make_button("Main Menu", 14)
+
+	var buttons := HBoxContainer.new()
+	buttons.add_theme_constant_override("separation", 16)
+	buttons.alignment = BoxContainer.ALIGNMENT_CENTER
+	box.add_child(buttons)
+
+	var quit := UIKit.make_texture_button(EXIT_BUTTON_ICON, Vector2(56, 56))
+	quit.tooltip_text = "Exit to Main Menu"
 	quit.pressed.connect(_on_quit)
-	box.add_child(quit)
+	buttons.add_child(quit)
+
+	var settings := UIKit.make_texture_button(SETTINGS_BUTTON_ICON, Vector2(56, 56))
+	settings.tooltip_text = "Settings"
+	settings.pressed.connect(_on_pause_settings)
+	buttons.add_child(settings)
+
+	var resume := UIKit.make_texture_button(RESUME_BUTTON_ICON, Vector2(56, 56))
+	resume.tooltip_text = "Resume"
+	resume.pressed.connect(_on_resume)
+	buttons.add_child(resume)
