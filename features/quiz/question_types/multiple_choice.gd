@@ -111,6 +111,7 @@ func _make_bar(i: int, text: String, idle_tex: Texture2D, hover_tex: Texture2D) 
 
 	b.mouse_entered.connect(func() -> void: hover_rect.visible = true)
 	b.mouse_exited.connect(func() -> void: hover_rect.visible = false)
+	b.pressed.connect(func() -> void: Audio.play_sfx("click"))
 	b.pressed.connect(_on_option.bind(i))
 	return b
 

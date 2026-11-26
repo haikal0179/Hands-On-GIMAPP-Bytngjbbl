@@ -356,6 +356,7 @@ func _on_screen_gui_input(event: InputEvent) -> void:
 		return
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		get_viewport().set_input_as_handled()
+		Audio.play_sfx("click")
 		_handle_next_action()
 
 

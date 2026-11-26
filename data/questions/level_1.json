@@ -1,10 +1,15 @@
 {
   "questions": [
-    {"type": "quiz", "question": "Siapa proklamator kemerdekaan Indonesia bersama Soekarno?", "options": ["Sutan Sjahrir", "Mohammad Hatta", "Tan Malaka", "Ki Hajar Dewantara"], "answer": 1},
-    {"type": "quiz", "question": "Jika 3x + 5 = 20, maka x = ?", "options": ["3", "4", "5", "6"], "answer": 2},
-    {"type": "quiz", "question": "Sinonim kata 'gigih' adalah...", "options": ["Malas", "Tekun", "Ragu", "Lemah"], "answer": 1},
-    {"type": "quiz", "question": "Hasil dari 15% x 240 adalah...", "options": ["24", "30", "36", "40"], "answer": 2},
-    {"type": "match", "time": 25, "question": "Susun kepingan memori ke slot yang benar (klik 2 kepingan untuk menukar).", "slots": ["MATEMATIKA", "BAHASA", "LOGIKA"], "shards": [{"text": "Luas lingkaran = pi x r^2", "slot": 0}, {"text": "Kalimat efektif: hemat kata, tidak bertele-tele", "slot": 1}, {"text": "Jika P maka Q, P benar, maka Q benar", "slot": 2}]},
-    {"type": "quiz", "question": "Pola bilangan: 2, 4, 8, 16, ... Angka berikutnya?", "options": ["18", "24", "32", "64"], "answer": 2}
+    {"type": "quiz", "question": "What is the antonym of \"cold\"?", "options": ["Boeing 707", "Hot", "5", "What's an antonym again?"], "answer": 1},
+    {"type": "quiz", "question": "Chad likes all types of fruit. Which of the following statements is verifiably true?", "options": ["Chad likes apples.", "Apples like Chad.", "Chad is an apple.", "Apple chad"], "answer": 0},
+    {"type": "quiz", "question": "John ___ asleep.", "options": ["John", "is", "???", "(blank)"], "answer": 1},
+    {"type": "quiz", "question": "What is the capital of France?", "options": ["Paris", "Baguette", "Veritas", "Hong Kong"], "answer": 0},
+    {"type": "quiz", "question": "What does the cow say?", "options": ["Veritasium", "Moo", "Yellow one", "Green"], "answer": 1},
+    {"type": "quiz", "question": "What is the longest river in the world?", "options": ["Nile River", "Rivers Cuomo", "Riverdale", "Jatinangor"], "answer": 0},
+    {"type": "quiz", "question": "10 + 5", "options": ["67", "Nine", "15", "007"], "answer": 2},
+    {"type": "quiz", "question": "If Amy was 5 years old last year, how old is Amy this year?", "options": ["North Atlantic Treaty Organization", "27", "6", "Et tu, Brute?"], "answer": 2},
+    {"type": "quiz", "question": "What is the equation for the area of a square?", "options": ["Area = s^2", "It goes in the square hole.", "6", "https://xkcd.com/2740/"], "answer": 0},
+    {"type": "quiz", "question": "John has 1.024.586 cucumbers. John wants to give some of his cucumbers to his 521.4 friends. Each friend will receive 0 cucumbers. How many cucumbers has John given away?", "options": ["0", "John", "0.4", "1/x"], "answer": 0},
+    {"type": "match", "time": 25, "question": "Match each item to its category.", "slots": ["City", "Country", "Continent"], "shards": [{"text": "Kyoto", "slot": 0}, {"text": "Lithuania", "slot": 1}, {"text": "Oceania", "slot": 2}]}
   ]
 }

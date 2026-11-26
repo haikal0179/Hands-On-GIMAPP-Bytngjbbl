@@ -70,6 +70,7 @@ func _make_hotspot_button(rel_rect: Rect2) -> Button:
 	btn.add_theme_stylebox_override("normal", normal)
 	btn.add_theme_stylebox_override("hover", hover)
 	btn.add_theme_stylebox_override("pressed", pressed)
+	btn.pressed.connect(func() -> void: Audio.play_sfx("click"))
 	return btn
 
 

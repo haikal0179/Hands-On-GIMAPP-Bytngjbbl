@@ -255,6 +255,7 @@ func _build_ui() -> void:
 	pause_btn.position = Vector2(8, 8)
 	pause_btn.size = Vector2(26, 26)
 	pause_btn.process_mode = Node.PROCESS_MODE_ALWAYS    # still clickable while paused
+	pause_btn.pressed.connect(func() -> void: Audio.play_sfx("click"))
 	pause_btn.pressed.connect(_on_pause_pressed)
 	add_child(pause_btn)
 

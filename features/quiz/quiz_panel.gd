@@ -14,6 +14,9 @@ const TIMER_LABEL_X := 70.0
 # Bar jawaban dari artist mulai di y=112, jadi teks soal harus muat di y 50-110.
 const TEXT_X := 117.0
 const TEXT_W := 412.0
+const QUESTION_FONT_SIZE := 12
+const QUESTION_MIN_FONT_SIZE := 8
+const QUESTION_MAX_HEIGHT := 44.0
 const ACTIONS_POS := Vector2(130, 261)   # tombol upgrade (skip, tebak) di bawah bar jawaban
 const ACTIONS_MAX_W := 320.0             # jangan sampai menabrak namecard musuh di kanan-bawah
 
@@ -41,6 +44,7 @@ func _ready() -> void:
 	header = VBoxContainer.new()
 	header.position = Vector2(TEXT_X, 50)
 	header.size = Vector2(TEXT_W, 60)
+	header.clip_contents = true
 	header.add_theme_constant_override("separation", 2)
 	header.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(header)
@@ -160,9 +164,12 @@ func start(question: Dictionary, time: float, options: Dictionary) -> void:
 
 	# Kalau soal punya gambar, gambarnya di kanan-atas papan dan teks soal dipersempit
 	var has_image := _add_image()
-	var ql := UIKit.make_label(str(q.get("question", "")), 12, Color.WHITE, TEXT_W - (76.0 if has_image else 0.0))
+	var question_text := str(q.get("question", ""))
+	var question_width := TEXT_W - (76.0 if has_image else 0.0)
+	var ql := UIKit.make_label(question_text, QUESTION_FONT_SIZE, Color.WHITE, question_width)
 	ql.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	header.add_child(ql)
+	_fit_question_label(ql, question_text, question_width)
 
 	handler = QuestionTypes.create(str(q.get("type", "quiz")))
 	if handler == null:
@@ -173,6 +180,19 @@ func start(question: Dictionary, time: float, options: Dictionary) -> void:
 	handler.timer_stopped.connect(func() -> void: running = false)
 	handler.build(body, q, opts)
 	_build_actions()
+
+
+func _fit_question_label(label: Label, text: String, width: float) -> void:
+	var font := label.get_theme_font("font")
+	var font_size := QUESTION_FONT_SIZE
+	var text_size := font.get_multiline_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, width, font_size)
+	while text_size.y > QUESTION_MAX_HEIGHT and font_size > QUESTION_MIN_FONT_SIZE:
+		font_size -= 1
+		text_size = font.get_multiline_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, width, font_size)
+
+	label.add_theme_font_size_override("font_size", font_size)
+	label.custom_minimum_size = Vector2(width, QUESTION_MAX_HEIGHT)
+	label.clip_text = true
 
 
 func _clear_ui() -> void:

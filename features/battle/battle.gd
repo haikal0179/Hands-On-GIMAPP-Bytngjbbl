@@ -247,6 +247,7 @@ func _build_pause_layer() -> void:
 		btn.reparent(pause_canvas)
 		if not btn.pressed.is_connected(_on_pause):
 			btn.pressed.connect(_on_pause)
+		btn.pressed.connect(func() -> void: Audio.play_sfx("click"))
 	
 	pause_layer = ColorRect.new()
 	pause_layer.color = Color(0, 0, 0, 0.75)

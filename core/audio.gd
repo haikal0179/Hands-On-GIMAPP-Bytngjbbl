@@ -5,8 +5,10 @@ extends Node
 
 const MUSIC_DIR := "res://assets/audio/music/"
 const SFX_DIR := "res://assets/audio/sfx/"
+const SFX_ALIASES := {"click": "Click SFX."}
 const MUSIC_VOLUME_DB := -15.0
 const SFX_VOLUME_DB := 3.0
+const CLICK_SFX_VOLUME_DB := -8.0
 const FADE_TIME := 0.8
 const PAUSED_MUSIC_VOLUME_DB := -22.0
 const MUSIC_DUCK_FADE_TIME := 0.25
@@ -136,12 +138,14 @@ func stop_music() -> void:
 
 
 func play_sfx(sfx_name: String) -> void:
-	var stream = _find_stream(SFX_DIR + sfx_name)
+	var is_click := sfx_name == "click"
+	var stream_name: String = str(SFX_ALIASES.get(sfx_name, sfx_name))
+	var stream = _find_stream(SFX_DIR + stream_name)
 	if stream == null:
 		return   # SFX belum ada -> dilewati
 	var p := AudioStreamPlayer.new()
 	p.stream = stream
-	p.volume_db = SFX_VOLUME_DB
+	p.volume_db = CLICK_SFX_VOLUME_DB if is_click else SFX_VOLUME_DB
 	add_child(p)
 	p.finished.connect(p.queue_free)
 	p.play()

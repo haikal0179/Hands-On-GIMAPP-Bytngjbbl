@@ -1,10 +1,19 @@
 {
   "questions": [
-    {"type": "quiz", "question": "Choose the correct word: She ___ to school every day.", "options": ["go", "goes", "going", "gone"], "answer": 1},
-    {"type": "quiz", "question": "The synonym of 'rapid' is...", "options": ["slow", "fast", "weak", "quiet"], "answer": 1},
-    {"type": "quiz", "question": "Antonim kata 'kikir' adalah...", "options": ["Pelit", "Dermawan", "Hemat", "Rakus"], "answer": 1},
-    {"type": "quiz", "question": "Which sentence is correct?", "options": ["He don't like coffee.", "He doesn't likes coffee.", "He doesn't like coffee.", "He not like coffee."], "answer": 2},
-    {"type": "match", "time": 25, "question": "Susun kepingan memori ke slot yang benar.", "slots": ["SINONIM", "ANTONIM", "KATA BAKU"], "shards": [{"text": "pandai = cerdas", "slot": 0}, {"text": "tinggi >< rendah", "slot": 1}, {"text": "risiko (bukan resiko)", "slot": 2}]},
-    {"type": "quiz", "question": "Choose the correct past tense: They ___ football yesterday.", "options": ["play", "plays", "played", "playing"], "answer": 2}
+    {"type": "quiz", "question": "The Scopes trial was a legal case that centered on the debate between...", "options": ["Evolution vs Creationism", "Pro-life vs Pro-choice", "Segregation vs Integration", "Communism vs Capitalism"], "answer": 0},
+    {"type": "quiz", "question": "Which of the following countries did not declare war on Germany in World War II?", "options": ["Turkey", "Argentina", "Ireland", "Lebanon"], "answer": 2},
+    {"type": "quiz", "question": "Which of the following countries shares a border with Nepal?", "options": ["Senegal", "India", "Canada", "Bhutan"], "answer": 1},
+    {"type": "quiz", "question": "Released in 2013, Grand Theft Auto V is the ___ main installment in the Grand Theft Auto series.", "options": ["fifth", "seventh", "fifteenth", "twelfth"], "answer": 1},
+    {"type": "quiz", "question": "Taken in 1990 by Voyager 1, this photograph shows Earth from over 6 billion kilometers away and depicts Earth as less than a pixel. What is the name of this photograph?", "options": ["Pale Blue Dot", "The Blue Marble", "Tiny Blue Dot", "Gaia from 6 billion kilometers"], "answer": 0},
+    {"type": "quiz", "question": "The word lowkenuinely is an example of a...", "options": ["Calque", "Portmanteau", "Phrase", "Abbreviation"], "answer": 1},
+    {"type": "quiz", "question": "Etymologically speaking, the word amok is a loan word borrowed from...", "options": ["Japanese", "Chinese", "Malay", "Thai"], "answer": 2},
+    {"type": "quiz", "question": "The third installment of a highly influential video game series, this game was never localized or released outside its home country. What is the name of this game?", "options": ["Shin Megami Tensei III: Nocturne", "Dragon Quest III", "Mother 3", ".hack//Outbreak"], "answer": 2},
+    {"type": "quiz", "question": "What are the Three Kingdoms?", "options": ["Shu, Qin, Han", "Song, Wei, Jin", "Song, Zhao, Jin", "Shu, Wei, Wu"], "answer": 3},
+    {"type": "quiz", "question": "What is the complementary color of purple?", "options": ["Yellow", "Indigo", "Cyan", "Red"], "answer": 0},
+    {"type": "quiz", "question": "What language family does Finnish belong to?", "options": ["Baltic-Slavic", "Uralic", "Indo-European", "Scandinavian"], "answer": 1},
+    {"type": "quiz", "question": "Which of the following words is considered a gerund?", "options": ["Painting", "Awning", "Stormy", "Loved"], "answer": 0},
+    {"type": "quiz", "question": "What is the second tallest mountain in the world?", "options": ["Kilimanjaro", "K2", "Lhotse", "Krakatau"], "answer": 1},
+    {"type": "quiz", "question": "What country experienced a period of economic stagnation nicknamed \"The Lost Decades\"?", "options": ["Indonesia", "Thailand", "Japan", "Russia"], "answer": 2},
+    {"type": "match", "time": 30, "question": "Match each group to its historical category.", "slots": ["Historical Event", "Historical Figure", "Historical Place"], "shards": [{"text": "The Cold War, The Great Long March, Bersiap", "slot": 0}, {"text": "Alan Turing, Joseph Stalin, Rosa Parks", "slot": 1}, {"text": "Windsor Castle, The Motherland Calls, Rengasdengklok", "slot": 2}]}
   ]
 }

@@ -1,9 +1,8 @@
 # Writing questions
 
-Each level has its own file: `data/questions/level_1.json` ... `level_4.json`
-(Lv1-3 need about 6 each, the boss level about 8; when they run out they reshuffle).
-Because every level is a separate file, two people can write questions at the same time
-without conflicts.
+Each level has its own file: `data/questions/level_1.json` ... `level_4.json`.
+Questions are shuffled and reshuffled when a level's pool runs out. Because every level is
+a separate file, two people can write questions at the same time without conflicts.
 
 ```json
 {
@@ -11,10 +10,10 @@ without conflicts.
 	{"type": "quiz", "question": "3x + 5 = 20, x = ?", "options": ["3", "4", "5", "6"], "answer": 2},
 	{"type": "quiz", "question": "Identify the picture", "image": "res://assets/art/q1.png",
 	 "options": ["A", "B", "C", "D"], "answer": 0, "time": 20},
-	{"type": "match", "time": 25, "question": "Put each shard in the right slot.",
+	{"type": "match", "time": 25, "question": "Match each group to the right category.",
 	 "slots": ["MATH", "LANGUAGE", "LOGIC"],
-	 "shards": [{"text": "Circle area = pi r^2", "slot": 0},
-				{"text": "Effective sentences are concise", "slot": 1},
+	 "shards": [{"text": "Circle area = pi r^2, 2x + 1 = 5", "slot": 0},
+				{"text": "Effective sentences, synonyms", "slot": 1},
 				{"text": "If P then Q; P true so Q true", "slot": 2}]}
   ]
 }

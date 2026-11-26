@@ -1,10 +1,15 @@
 {
   "questions": [
-    {"type": "quiz", "question": "Semua mahasiswa rajin belajar. Budi adalah mahasiswa. Kesimpulan yang benar?", "options": ["Budi tidak rajin belajar", "Budi rajin belajar", "Semua yang rajin adalah mahasiswa", "Budi pasti lulus"], "answer": 1},
-    {"type": "quiz", "question": "Pola bilangan: 1, 1, 2, 3, 5, 8, ... Angka berikutnya?", "options": ["11", "12", "13", "14"], "answer": 2},
-    {"type": "quiz", "question": "Penulisan kata baku yang benar adalah...", "options": ["aktifitas", "aktivitas", "aktipitas", "aktivites"], "answer": 1},
-    {"type": "quiz", "question": "Ide pokok paragraf biasanya terdapat pada...", "options": ["Kalimat utama", "Kalimat penjelas", "Judul saja", "Kalimat terakhir selalu"], "answer": 0},
-    {"type": "match", "time": 25, "question": "Susun kepingan memori ke slot yang benar.", "slots": ["PENALARAN", "BAHASA", "PENGETAHUAN UMUM"], "shards": [{"text": "A adalah B, C adalah A, maka C adalah B", "slot": 0}, {"text": "Koma dipakai untuk memisahkan unsur perincian", "slot": 1}, {"text": "Pancasila ditetapkan sebagai dasar negara pada 18 Agustus 1945", "slot": 2}]},
-    {"type": "quiz", "question": "Lembaga yang berwenang menguji undang-undang terhadap UUD 1945 adalah...", "options": ["Mahkamah Agung", "Mahkamah Konstitusi", "DPR", "KPK"], "answer": 1}
+    {"type": "quiz", "question": "Chloe hates cheese and likes cake. Which of the following statements is most false?", "options": ["Chloe likes cake.", "Chloe likes cheese and cake.", "Chloe hates cheese or cake.", "Chloe hates pancakes."], "answer": 1},
+    {"type": "quiz", "question": "1, 3, 9, 13, 65, ...", "options": ["390", "71", "78", "325"], "answer": 1},
+    {"type": "quiz", "question": "AR, BS, DU, AX, EB, JG, ...", "options": ["CJ", "DM", "FM", "GJ"], "answer": 1},
+    {"type": "quiz", "question": "If P then Q. If Q then R. Which of these statements is true?", "options": ["If Q then P", "If Q then R", "If not R then not P", "If not P then not R"], "answer": 2},
+    {"type": "quiz", "question": "Choose the odd one out!", "options": ["River", "Lake", "Delta", "Valley"], "answer": 3},
+    {"type": "quiz", "question": "Matthew, Jacob, Sharon, Daniel, and Ashley all live in the same block. Matthew's house is next to Jacob's while Jacob's house is the furthest left on the block. Ashley's house, on the other hand, is not adjacent to Daniel's. Which statement is verifiably true?", "options": ["Daniel's house is the farthest right on the block.", "Daniel's house is next to Matthew's house.", "Ashley's house is next to Sharon's.", "Not enough information."], "answer": 3},
+    {"type": "quiz", "question": "Before Carol arrived home, John ___ the house.", "options": ["Cleaned", "Had cleaned", "Has cleaned", "Was cleaning"], "answer": 1},
+    {"type": "quiz", "question": "The government should implement social programs for the less fortunate. The phrase \"less fortunate\" is a euphemism for...", "options": ["Unlucky people", "Poor people", "Short people", "Asocial people"], "answer": 1},
+    {"type": "quiz", "question": "All tunni are mesa. Some mesa are gani. No gani is klepzor. Which of these statements is true?", "options": ["All klepzor are tunni.", "All mesa are gani.", "Some mesa are klepzor.", "No tunni is gani."], "answer": 2},
+    {"type": "quiz", "question": "Bannaaditu means \"he drinks water\" and Sattaaditu means \"he urinates\". What does Satteenaiditu mean?", "options": ["He cooks water", "He pours coffee", "She spills water", "She pours coffee"], "answer": 3},
+    {"type": "match", "time": 30, "question": "Match each group of words to its category.", "slots": ["Verbs", "Adjectives", "Nouns"], "shards": [{"text": "Large, Salty, Fast", "slot": 1}, {"text": "Writes, Eats, Reads", "slot": 0}, {"text": "Car, Cat, Bag", "slot": 2}]}
   ]
 }

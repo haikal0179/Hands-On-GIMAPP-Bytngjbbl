@@ -245,6 +245,7 @@ func _is_solved() -> bool:
 func _on_shard(p: int) -> void:
 	if _locked:
 		return
+	Audio.play_sfx("click")
 	if _selected == -1:
 		_selected = p
 	elif _selected == p:
