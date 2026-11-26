@@ -4,7 +4,6 @@ extends Node
 
 # ---- scene ----
 const SCENE_TITLE := "res://features/title/title.tscn"
-const SCENE_SETTINGS := "res://features/settings/settings.tscn"
 const SCENE_BATTLE := "res://features/battle/battle.tscn"
 const SCENE_UPGRADE := "res://features/upgrades/upgrade_pick.tscn"
 const SCENE_END := "res://features/end_screen/end_screen.tscn"
@@ -13,7 +12,7 @@ const SCENE_END := "res://features/end_screen/end_screen.tscn"
 const QUESTIONS_DIR := "res://data/questions"          # level_1.json ... level_4.json
 
 # ---- player ----
-const PLAYER_NAME := "TheO"
+const PLAYER_NAME := "UTBK, John"
 const PLAYER_MAX_HP := 180
 const BASE_DAMAGE := 40
 

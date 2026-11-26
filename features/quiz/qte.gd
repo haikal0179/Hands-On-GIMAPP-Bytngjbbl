@@ -8,7 +8,7 @@ const UIKit := preload("res://core/ui_kit.gd")
 signal stopped(outcome: String)
 
 const SPEED := 0.9      # kecepatan penanda (lebar bar per detik)
-const WIDTH := 400.0
+const WIDTH := 440.0
 const GREEN := Vector2(0.42, 0.58)
 const ORANGE := Vector2(0.30, 0.70)
 
@@ -20,7 +20,7 @@ var _marker: ColorRect
 
 func build(content: Container) -> void:
 	active = true
-	content.add_child(UIKit.make_label("MAKE YOUR GUESS!  (SPACE / click STOP)", 12, Color(1, 0.8, 0.3)))
+	content.add_child(UIKit.make_label("TEBAK JAWABANNYA!  (SPASI / klik STOP)", 12, Color(1, 0.8, 0.3)))
 
 	var bar := Control.new()
 	bar.custom_minimum_size = Vector2(WIDTH, 36)
@@ -49,7 +49,7 @@ func build(content: Container) -> void:
 	var stop := UIKit.make_button("STOP!", 14)
 	stop.pressed.connect(stop_now)
 	content.add_child(stop)
-	content.add_child(UIKit.make_label("Red = stun   Orange = +20% attack   Green = 3x attack", 10))
+	content.add_child(UIKit.make_label("Merah = stun   Oranye = serangan +20%   Hijau = 3x serangan", 10))
 
 
 func tick(delta: float) -> void:

@@ -1,26 +1,26 @@
 {
 	"level_1_pre": {
-		"left_name": "TheO",
-		"right_name": "TYO",
-		"left_portrait": "res://assets/art/char/TheO Idle.png",
-		"right_portrait": "res://assets/art/char/TyO (TO) Idle.png",
+		"left_name": "JOHN UTBK",
+		"right_name": "ICHIKIWIR",
+		"left_portrait": "res://assets/art/char1.png",
+		"right_portrait": "res://assets/art/char2.png",
 		"lines": [
 			{
 				"speaker": "right",
-				"text": "Heh... You just sat down at the computer and your hands are already shaking?",
+				"text": "Heh... baru duduk di depan komputer saja tanganmu sudah dingin begitu?",
 				"thought_title": "FIRST ENCOUNTER",
 				"thought_tex": "res://icon.svg",
 				"shake": "right"
 			},
 			{
 				"speaker": "left",
-				"text": "I'm just a bit nervous. Once the questions appear, I'll be fired up.",
+				"text": "Cuma gugup awal. Begitu layar soal kebuka, aku bakal langsung panas.",
 				"thought_title": "DEEP BREATH",
 				"thought_tex": "res://icon.svg"
 			},
 			{
 				"speaker": "right",
-				"text": "Prove it. Don't let your mind go blank on the very first question!",
+				"text": "Buktikan saja. Jangan sampai baru nomor satu kepalamu sudah mendadak kosong!",
 				"thought_title": "BATTLE START",
 				"thought_tex": "res://icon.svg",
 				"shake": "all"
@@ -28,98 +28,98 @@
 		]
 	},
 	"level_1_post": {
-		"left_name": "TheO",
-		"right_name": "TYO",
-		"left_portrait": "res://assets/art/char/TheO Idle.png",
-		"right_portrait": "res://assets/art/char/TyO (TO) Idle.png",
+		"left_name": "JOHN UTBK",
+		"right_name": "ICHIKIWIR",
+		"left_portrait": "res://assets/art/char1.png",
+		"right_portrait": "res://assets/art/char2.png",
 		"lines": [
 			{
 				"speaker": "right",
-				"text": "Hmph... your reflexes are pretty sharp. You're already speeding through the warm-up.",
+				"text": "Cih... lumayan juga refleks otakmu. Baru pemanasan sudah berani ngebut.",
 				"thought_title": "ENEMY SHAKEN",
 				"thought_tex": "res://icon.svg",
 				"shake": "right"
 			},
 			{
 				"speaker": "left",
-				"text": "One obstacle down. Yet the pressure in this room is only just beginning...",
+				"text": "Satu rintangan lewat. Tapi rasanya tekanan di ruangan ini baru saja dimulai...",
 				"thought_title": "STAGE CLEAR",
 				"thought_tex": "res://icon.svg"
 			}
 		]
 	},
 	"level_2_pre": {
-		"left_name": "TheO",
-		"right_name": "ANUM",
-		"left_portrait": "res://assets/art/char/TheO Idle.png",
-		"right_portrait": "res://assets/art/char/Anum (PU) Idle.png",
+		"left_name": "JOHN UTBK",
+		"right_name": "ICHIKIWIR II",
+		"left_portrait": "res://assets/art/char1.png",
+		"right_portrait": "res://assets/art/char2.png",
 		"lines": [
 			{
 				"speaker": "right",
-				"text": "Looks like you're getting confident. Let me make all that memorized material feel unfamiliar.",
+				"text": "Kelihatannya kamu mulai pede, ya? Sini kubuat semua materi hafalanmu terasa asing.",
 				"thought_title": "MIND FOG",
 				"thought_tex": "res://icon.svg",
 				"shake": "thought"
 			},
 			{
 				"speaker": "left",
-				"text": "Wait... I just read this last night. Why is it suddenly all a blur?!",
+				"text": "Tunggu... padahal semalam baru kubaca, kenapa mendadak samar begini?!",
 				"thought_title": "MEMORY SLIP",
 				"thought_tex": "res://icon.svg",
 				"shake": "left"
 			},
 			{
 				"speaker": "right",
-				"text": "Come on, doubt yourself! Change your answer at the last second!",
+				"text": "Ayo ragu! Ayo ganti jawabanmu di detik terakhir!",
 				"thought_title": "DOUBT",
 				"thought_tex": "res://icon.svg"
 			}
 		]
 	},
 	"level_2_post": {
-		"left_name": "TheO",
-		"right_name": "ANUM",
-		"left_portrait": "res://assets/art/char/TheO Idle.png",
-		"right_portrait": "res://assets/art/char/Anum (PU) Idle.png",
+		"left_name": "JOHN UTBK",
+		"right_name": "ICHIKIWIR II",
+		"left_portrait": "res://assets/art/char1.png",
+		"right_portrait": "res://assets/art/char2.png",
 		"lines": [
 			{
 				"speaker": "right",
-				"text": "Incredible... even with your memory wavering, your instincts still locked in the right answer!",
+				"text": "Gila... bahkan saat ingatanmu goyang, instingmu masih sempat mengunci jawaban yang benar!",
 				"thought_title": "BROKEN ILLUSION",
 				"thought_tex": "res://icon.svg",
 				"shake": "right"
 			},
 			{
 				"speaker": "left",
-				"text": "I almost fell for the distractor. I can't lose focus again.",
+				"text": "Hampir saja ketipu opsi pengecoh. Jangan sampai hilang fokus lagi.",
 				"thought_title": "RECOVERED",
 				"thought_tex": "res://icon.svg"
 			}
 		]
 	},
 	"level_3_pre": {
-		"left_name": "TheO",
-		"right_name": "LITA",
-		"left_portrait": "res://assets/art/char/TheO Idle.png",
-		"right_portrait": "res://assets/art/char/Lita (LBILBE) Idle.png",
+		"left_name": "JOHN UTBK",
+		"right_name": "ICHIKIWIR III",
+		"left_portrait": "res://assets/art/char1.png",
+		"right_portrait": "res://assets/art/char2.png",
 		"lines": [
 			{
 				"speaker": "right",
-				"text": "Hear the clock ticking? Your caffeine is wearing off, your eyes are burning, and these questions are getting ridiculous.",
+				"text": "Dengar detak waktu itu? Kafeinmu mulai habis, matamu mulai perih, dan soal makin tidak masuk akal.",
 				"thought_title": "WARNING",
 				"thought_tex": "res://icon.svg",
 				"shake": "all"
 			},
 			{
 				"speaker": "left",
-				"text": "My head's getting heavy... but if I stop thinking now, all that practice will have been for nothing.",
+				"text": "Kepalaku mulai berat... tapi kalau berhenti mikir sekarang, semua latihan kemarin sia-sia.",
 				"thought_title": "OVERLOAD",
 				"thought_tex": "res://icon.svg",
 				"shake": "left"
 			},
 			{
 				"speaker": "right",
-				"text": "Give up! Just guess, close your eyes, and pray!",
+				"text": "Menyerah saja! Pencet asal, tutup mata, dan berdoa!",
 				"thought_title": "PANIC MODE",
 				"thought_tex": "res://icon.svg",
 				"shake": "right"
@@ -127,48 +127,48 @@
 		]
 	},
 	"level_3_post": {
-		"left_name": "TheO",
-		"right_name": "LITA",
-		"left_portrait": "res://assets/art/char/TheO Idle.png",
-		"right_portrait": "res://assets/art/char/Lita (LBILBE) Idle.png",
+		"left_name": "JOHN UTBK",
+		"right_name": "ICHIKIWIR III",
+		"left_portrait": "res://assets/art/char1.png",
+		"right_portrait": "res://assets/art/char2.png",
 		"lines": [
 			{
 				"speaker": "right",
-				"text": "Impossible... you can still think clearly under this much pressure?!",
+				"text": "Mustahil... di bawah tekanan separah itu kau masih bisa berpikir jernih?!",
 				"thought_title": "CRITICAL HIT",
 				"thought_tex": "res://icon.svg",
 				"shake": "right"
 			},
 			{
 				"speaker": "left",
-				"text": "Whew... take a breath. Just one more step before the final bell.",
+				"text": "Fuh... napas dulu. Tinggal satu langkah lagi sebelum bel selesai berbunyi.",
 				"thought_title": "CLUTCH",
 				"thought_tex": "res://icon.svg"
 			}
 		]
 	},
 	"level_4_pre": {
-		"left_name": "TheO",
-		"right_name": "TIKA",
-		"left_portrait": "res://assets/art/char/TheO Idle.png",
-		"right_portrait": "res://assets/art/char/Tika (PKPM) Idle.png",
+		"left_name": "JOHN UTBK",
+		"right_name": "THE FINAL EXAM",
+		"left_portrait": "res://assets/art/char1.png",
+		"right_portrait": "res://assets/art/char2.png",
 		"lines": [
 			{
 				"speaker": "right",
-				"text": "This is the deciding moment, TheO. One small mistake here could erase everything you've fought for.",
+				"text": "Inilah titik penentuannya, John. Satu kesalahan kecil di sini akan menghapus seluruh perjuanganmu.",
 				"thought_title": "FINAL ENCOUNTER",
 				"thought_tex": "res://icon.svg",
 				"shake": "all"
 			},
 			{
 				"speaker": "left",
-				"text": "So be it. No matter how absurd the questions get, I won't leave this room with regrets.",
+				"text": "Biar saja. Mau soalnya seabsurd apa pun, aku tidak akan keluar dari ruangan ini dengan penyesalan.",
 				"thought_title": "FULL FOCUS",
 				"thought_tex": "res://icon.svg"
 			},
 			{
 				"speaker": "right",
-				"text": "SHOW ME THAT YOU DESERVE TO PASS TODAY!",
+				"text": "TUNJUKKAN APAKAH KAU LAYAK LOLOS HARI INI!",
 				"thought_title": "ULTIMATE UTBK",
 				"thought_tex": "res://icon.svg",
 				"shake": "all"
@@ -176,20 +176,20 @@
 		]
 	},
 	"level_4_post": {
-		"left_name": "TheO",
-		"right_name": "TIKA",
-		"left_portrait": "res://assets/art/char/TheO Idle.png",
-		"right_portrait": "res://assets/art/char/Tika (PKPM) Idle.png",
+		"left_name": "JOHN UTBK",
+		"right_name": "THE FINAL EXAM",
+		"left_portrait": "res://assets/art/char1.png",
+		"right_portrait": "res://assets/art/char2.png",
 		"lines": [
 			{
 				"speaker": "right",
-				"text": "Time's up... the exam system is locked. You really held on until the very last second.",
+				"text": "Waktu habis... sistem ujian terkunci. Kau benar-benar bertahan sampai detik terakhir.",
 				"thought_title": "EXAM LOCKED",
 				"thought_tex": "res://icon.svg"
 			},
 			{
 				"speaker": "left",
-				"text": "It's over... finally! Whatever happens next, I gave it everything I had!",
+				"text": "Selesai... akhirnya selesai! Apa pun hasilnya nanti, aku sudah kasih yang terbaik!",
 				"thought_title": "VICTORY",
 				"thought_tex": "res://icon.svg",
 				"shake": "thought"

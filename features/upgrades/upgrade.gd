@@ -5,12 +5,11 @@ extends RefCounted
 ## Upgrade baru = salin items/sharpened_pencil.gd. Tidak ada daftar yang perlu diedit:
 ## registry.gd memindai folder items/ otomatis. Panduan lengkap: docs/UPGRADES.md
 ## Contoh paling sederhana: sharpened_pencil.gd dan pattern_recognition.gd.
-const ICON_DIR := "res://assets/art/ui/upgrades/"
+
 var id := ""             # unik, huruf kecil + underscore
 var display_name := ""   # nama yang tampil di layar pilih upgrade
 var tier := 1            # 1 = hadiah Level 1, 2 = Level 2, 3 = Level 3
 var desc := ""           # deskripsi singkat
-var icon_path := ""      
 
 
 ## Dipanggil di awal tiap battle (reset status per musuh di sini).
@@ -55,10 +54,3 @@ func add_action(opts: Dictionary, label: String, result: String) -> void:
 ## mis. await battle.attack_enemy(...) atau await battle.hurt_player(...)).
 func on_quiz_result(_result: String, _battle) -> bool:
 	return false
-
-## Path ikon 32x32 untuk layar pilih upgrade. Biasanya tidak perlu diubah: cukup taruh PNG
-## bernama sama dengan display_name di ICON_DIR (contoh: "Sharpened Pencil.png").
-func get_icon_path() -> String:
-	if icon_path != "":
-		return icon_path
-	return ICON_DIR + display_name.replace("'", "_") + ".png"

@@ -61,7 +61,7 @@ func finish_level(won: bool) -> void:
 			goto(Config.SCENE_END)
 		else:
 			# Kalah = tidak mengulang level, tapi upgrade tier ini hilang.
-			notice = "Defeated at %s. Tier %d upgrade missed..." % [Levels.ALL[level]["title"], level + 1]
+			notice = "Gagal di %s. Upgrade tier %d terlewat..." % [Levels.ALL[level]["title"], level + 1]
 			level += 1
 			goto(Config.SCENE_BATTLE)
 
