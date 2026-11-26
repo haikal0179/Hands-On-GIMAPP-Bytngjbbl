@@ -52,7 +52,6 @@ const RIGHT_COLUMN_CREDITS := [
 		"names": [
 			"Darryl Gunawan",
 			"Neshandra Aqilazahra Brillianto",
-			"Paulina Santoso",
 			"Skolastika Filia Tandean"
 		]
 	},
