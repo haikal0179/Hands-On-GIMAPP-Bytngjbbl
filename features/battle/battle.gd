@@ -15,9 +15,9 @@ const DialogueScene := preload("res://features/story/dialogue.tscn")
 
 # "Inner thoughts" John (tema lore): muncul sebagai pesan saat gagal.
 const THOUGHTS := {
-	"wrong": ["...aku tahu ini. Kenapa malah lupa?", "Bukan itu... bukan itu jawabannya.", "Ingatanku berantakan."],
-	"timeout": ["Blank. Kepalaku kosong.", "Waktunya habis...", "Terlalu lama berpikir."],
-	"gamble_red": ["Asal tebak... dan meleset. Kepalaku pusing."],
+	"wrong": ["...I know this. Why did I forget?", "That's not it... that's not the answer.", "My memory's a mess."],
+	"timeout": ["Blank. My mind's gone empty.", "Time's up...", "I'm taking too long to think."],
+	"gamble_red": ["I guessed... and got it wrong. My head's pounding."],
 }
 
 @onready var ui = $BattleUI
@@ -66,7 +66,7 @@ func _ready() -> void:
 
 func _intro() -> void:
 	ui.set_quiz_mode(false)
-	var msg := "%s muncul!" % level_data["enemy"]
+	var msg := "%s appears!" % level_data["enemy"]
 	if GameState.notice != "":
 		msg = GameState.notice + "\n" + msg
 		GameState.notice = ""
@@ -109,7 +109,7 @@ func _on_quiz_answered(result: String) -> void:
 	if not handled:
 		if result == "correct":
 			Audio.play_sfx("correct")
-			await attack_enemy(1, 1.0, "Jawaban benar! Serangan masuk.")
+			await attack_enemy(1, 1.0, "Correct answer! The attack lands.")
 		else:
 			Audio.play_sfx("wrong")
 			await hurt_player(result)
@@ -146,7 +146,7 @@ func hurt_player(thought_key: String, allow_dodge: bool = true, extra: String = 
 	if allow_dodge:
 		for u in GameState.owned_upgrades():
 			if u.should_dodge():
-				ui.show_message(thought + "\n" + u.display_name + ": John menghindar!")
+				ui.show_message(thought + "\n" + u.display_name + ": John dodges!")
 				ui.float_text("player", "DODGE!", Color(0.5, 1.0, 0.6))
 				await _wait(0.3)
 				return
@@ -169,12 +169,12 @@ func _end_level(won: bool) -> void:
 	finished = true
 	if won:
 		Audio.play_sfx("win")
-		ui.show_message("%s tumbang! Level selesai." % level_data["enemy"])
+		ui.show_message("%s is defeated! Level complete." % level_data["enemy"])
 		await _wait(1.6)
 		await story_ui.play_story("level_%d_post" % (GameState.level + 1))
 	else:
 		Audio.play_sfx("lose")
-		ui.show_message("John kehabisan tenaga...")
+		ui.show_message("John has run out of energy...")
 		await _wait(1.6)
 	GameState.finish_level(won)
 
@@ -188,17 +188,20 @@ func _wait(t: float) -> void:
 func _on_pause() -> void:
 	if finished:
 		return
+	Audio.set_music_ducked(true)
 	get_tree().paused = true
 	pause_layer.visible = true
 
 
 func _on_resume() -> void:
 	pause_layer.visible = false
+	Audio.set_music_ducked(false)
 	get_tree().paused = false
 
 
 func _on_quit() -> void:
 	get_tree().paused = false
+	Audio.set_music_ducked(false)
 	GameState.goto(Config.SCENE_TITLE)
 
 
@@ -226,9 +229,9 @@ func _build_pause_layer() -> void:
 	box.add_theme_constant_override("separation", 10)
 	center.add_child(box)
 	box.add_child(UIKit.make_label("PAUSED", 22))
-	var resume := UIKit.make_button("Lanjut", 14)
+	var resume := UIKit.make_button("Resume", 14)
 	resume.pressed.connect(_on_resume)
 	box.add_child(resume)
-	var quit := UIKit.make_button("Ke Menu Utama", 14)
+	var quit := UIKit.make_button("Main Menu", 14)
 	quit.pressed.connect(_on_quit)
 	box.add_child(quit)

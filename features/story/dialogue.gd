@@ -53,7 +53,7 @@ func _ready() -> void:
 	right_frame.add_theme_stylebox_override("panel", right_style)
 	
 	left_name_label = _attach_name_label(left_frame, "JOHN UTBK")
-	right_name_label = _attach_name_label(right_frame, "MUSUH")
+	right_name_label = _attach_name_label(right_frame, "ENEMY")
 	
 	var top_section := $RootUI/MainMargin/MainVBox/TopSection
 	top_section.alignment = BoxContainer.ALIGNMENT_CENTER

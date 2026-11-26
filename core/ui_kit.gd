@@ -19,13 +19,47 @@ static func make_label(text: String, size: int = 14, color: Color = Color.WHITE,
 	return l
 
 
-static func make_button(text: String, size: int = 14) -> Button:
+static func make_button(
+	text: String,
+	size: int = 14,
+	anchor: Vector2 = Vector2.ZERO,
+	offset: Vector2 = Vector2.ZERO,
+	button_size: Vector2 = Vector2(160, 30)
+) -> Button:
 	var b := Button.new()
 	b.text = text
 	b.add_theme_font_size_override("font_size", size)
-	b.custom_minimum_size = Vector2(160, 30)
+	b.custom_minimum_size = button_size
 	b.pressed.connect(func() -> void: Audio.play_sfx("click"))
+	set_control_layout(b, anchor, offset, button_size)
 	return b
+
+
+static func make_texture_button(
+	texture: Texture2D,
+	button_size: Vector2 = Vector2(48, 48),
+	anchor: Vector2 = Vector2.ZERO,
+	offset: Vector2 = Vector2.ZERO
+) -> TextureButton:
+	var b := TextureButton.new()
+	b.texture_normal = texture
+	b.ignore_texture_size = true
+	b.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
+	b.custom_minimum_size = button_size
+	b.pressed.connect(func() -> void: Audio.play_sfx("click"))
+	set_control_layout(b, anchor, offset, button_size)
+	return b
+
+
+static func set_control_layout(control: Control, anchor: Vector2, offset: Vector2, size: Vector2) -> void:
+	control.anchor_left = anchor.x
+	control.anchor_right = anchor.x
+	control.anchor_top = anchor.y
+	control.anchor_bottom = anchor.y
+	control.offset_left = offset.x
+	control.offset_top = offset.y
+	control.offset_right = offset.x + size.x
+	control.offset_bottom = offset.y + size.y
 
 
 ## Latar polos + kolom di tengah layar. Mengembalikan VBoxContainer untuk diisi.

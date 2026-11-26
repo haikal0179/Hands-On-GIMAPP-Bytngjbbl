@@ -26,8 +26,8 @@ func _ready() -> void:
 	var tier_name: String = ["I", "II", "III"][tier - 1]
 	var tier_color: Color = TIER_COLORS.get(tier, Color.WHITE)
 	var title: String = GameState.current_level()["title"]
-	box.add_child(UIKit.make_label("%s SELESAI!" % title.to_upper(), 20, Color(0.5, 1.0, 0.6)))
-	box.add_child(UIKit.make_label("Pilih 1 upgrade Tier %s" % tier_name, 14, tier_color.lightened(0.35)))
+	box.add_child(UIKit.make_label("%s COMPLETE!" % title.to_upper(), 20, Color(0.5, 1.0, 0.6)))
+	box.add_child(UIKit.make_label("Choose 1 Tier %s upgrade" % tier_name, 14, tier_color.lightened(0.35)))
 
 	var cards := HBoxContainer.new()
 	cards.alignment = BoxContainer.ALIGNMENT_CENTER
@@ -96,7 +96,7 @@ func _make_owned_row() -> HBoxContainer:
 	row.alignment = BoxContainer.ALIGNMENT_CENTER
 	row.add_theme_constant_override("separation", 6)
 	var dim := Color(0.7, 0.7, 0.8)
-	row.add_child(UIKit.make_label("Upgrade kamu:", 10, dim))
+	row.add_child(UIKit.make_label("Your upgrades:", 10, dim))
 
 	var owned: Array = GameState.owned_upgrades()
 	if owned.is_empty():

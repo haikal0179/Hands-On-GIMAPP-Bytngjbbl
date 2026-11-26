@@ -8,7 +8,7 @@ func _init() -> void:
 	id = "pattern_recognition"
 	display_name = "Pattern Recognition"
 	tier = 1
-	desc = "50% menghindar kalau jawaban salah."
+	desc = "50% chance to dodge when you answer incorrectly."
 
 
 func should_dodge() -> bool:

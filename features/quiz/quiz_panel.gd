@@ -144,7 +144,7 @@ func start(question: Dictionary, time: float, options: Dictionary) -> void:
 
 	var tag := str(q.get("tag", ""))
 	if opts.get("stunned", false):
-		tag += "   [STUN: waktu separuh]"
+		tag += "   [STUN: half time]"
 	var tag_label := UIKit.make_label(tag, 10, Color(1, 0.8, 0.3))
 	tag_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	content.add_child(tag_label)
