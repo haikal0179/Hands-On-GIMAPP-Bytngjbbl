@@ -115,10 +115,8 @@ func _on_quiz_answered(result: String) -> void:
 			break
 	if not handled:
 		if result == "correct":
-			Audio.play_sfx("correct")
 			await attack_enemy(1, 1.0, "Correct answer! The attack lands.")
 		else:
-			Audio.play_sfx("wrong")
 			await hurt_player(result)
 	await _wait(resolve_pause)
 	if enemy_hp <= 0:
@@ -135,7 +133,7 @@ func attack_enemy(hits: int, mult: float, msg: String) -> void:
 	for i in hits:
 		var dmg := _calc_damage(mult)
 		enemy_hp = maxi(0, enemy_hp - dmg)
-		Audio.play_sfx("hit")
+		Audio.play_sfx("Attack SFX")
 		ui.hit("enemy", dmg)
 		ui.set_enemy_hp(enemy_hp, enemy_max)
 		await _wait(0.5)
@@ -159,7 +157,7 @@ func hurt_player(thought_key: String, allow_dodge: bool = true, extra: String = 
 				return
 	ui.show_message(thought)
 	player_hp = maxi(0, player_hp - enemy_dmg)
-	Audio.play_sfx("hurt")
+	Audio.play_sfx("Hurt SFX")
 	ui.hit("player", enemy_dmg)
 	ui.set_player_hp(player_hp, player_max)
 	await _wait(0.5)
@@ -175,12 +173,12 @@ func _calc_damage(mult: float) -> int:
 func _end_level(won: bool) -> void:
 	finished = true
 	if won:
-		Audio.play_sfx("win")
+		Audio.play_sfx("Enemy die SFX")
 		ui.show_message("%s is defeated! Level complete." % level_data["enemy"])
 		await _wait(1.6)
 		await story_ui.play_story("level_%d_post" % (GameState.level + 1))
 	else:
-		Audio.play_sfx("lose")
+		Audio.play_sfx("Player die SFX")
 		ui.show_message("TheO has run out of energy...")
 		await _wait(1.6)
 	GameState.finish_level(won)
