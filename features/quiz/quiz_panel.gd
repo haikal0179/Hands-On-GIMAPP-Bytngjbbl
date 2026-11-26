@@ -1,143 +1,62 @@
 extends Control
+## QUIZ / PUZZLE: panel yang muncul di tengah layar saat soal aktif. File ini hanya
+## KOORDINATOR: kerangka panel, timer, tombol tambahan dari upgrade, dan QTE.
+##   - isi soal           -> question_types/ (satu file per jenis soal)
+##   - mini-game tebak    -> qte.gd
+##
+## Pemakaian (dari battle.gd):
+##     quiz.start(soal, detik, opsi)     ->  quiz.answered(hasil) dipancarkan saat selesai
+## Hasil: "correct" | "wrong" | "timeout" | "skip" | "gamble_green" | "gamble_orange" | "gamble_red"
+## (hasil selain correct/wrong/timeout datang dari tombol tambahan upgrade, lihat opts["actions"])
 
 const UIKit := preload("res://core/ui_kit.gd")
 const Qte := preload("res://features/quiz/qte.gd")
 const QuestionTypes := preload("res://features/quiz/question_types/registry.gd")
 
-const TIMER_FRAME_PATH := "res://assets/art/ui/timer/Timer_bar.png"
-const TIMER_FILL_PATH := "res://assets/art/ui/timer/Timer_filling.png"
-const TIMER_SCALE := 0.42
-const TIMER_POS := Vector2(116,284)
-const TIMER_LABEL_X := 70.0
-
-# Area teks di papan soal (layar 640x360). Papan digambar battle_ui: x 96-550, y 46-310.
-# Bar jawaban dari artist mulai di y=112, jadi teks soal harus muat di y 50-110.
-const TEXT_X := 117.0
-const TEXT_W := 412.0
-const ACTIONS_POS := Vector2(130, 261)   # tombol upgrade (skip, tebak) di bawah bar jawaban
-const ACTIONS_MAX_W := 320.0             # jangan sampai menabrak namecard musuh di kanan-bawah
-
 signal answered(result: String)
 
 var q: Dictionary = {}
 var opts: Dictionary = {}
-var done := true
-var running := false
+var done := true            # true = tidak ada soal aktif
+var running := false        # timer jalan
 var time_left := 0.0
 
-var handler = null
-var qte = null
+var handler = null          # jenis soal yang aktif (question_type.gd)
+var qte = null              # QTE yang aktif (qte.gd), null kalau tidak sedang QTE
 
-var header: VBoxContainer   # tag subtes + teks soal
-var body: Control           # tempat bar jawaban / kartu / QTE / tombol aksi (posisi absolut, seukuran layar)
-var time_bar: Range
+var panel: Panel
+var content: VBoxContainer
+var time_bar: ProgressBar
 
 
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	mouse_filter = Control.MOUSE_FILTER_IGNORE
+	mouse_filter = Control.MOUSE_FILTER_IGNORE   # supaya tombol pause di bawah tetap bisa diklik
 
-	# Papannya sendiri digambar battle_ui (quiz_board). Di sini hanya isinya.
-	header = VBoxContainer.new()
-	header.position = Vector2(TEXT_X, 50)
-	header.size = Vector2(TEXT_W, 60)
-	header.add_theme_constant_override("separation", 2)
-	header.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(header)
+	panel = Panel.new()
+	panel.position = Vector2(70, 80)
+	panel.size = Vector2(500, 196)
+	add_child(panel)
 
-	body = Control.new()
-	body.position = Vector2.ZERO
-	body.size = Vector2(640, 360)
-	body.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(body)
-
-	_build_timer_bar()
-
-
-func _build_timer_bar() -> void:
-	var frame_tex := load(TIMER_FRAME_PATH) as Texture2D if ResourceLoader.exists(TIMER_FRAME_PATH) else null
-	var fill_tex := load(TIMER_FILL_PATH) as Texture2D if ResourceLoader.exists(TIMER_FILL_PATH) else null
-	var parts := {}
-	if frame_tex != null and fill_tex != null:
-		parts = _crop_timer_textures(frame_tex, fill_tex)
+	content = VBoxContainer.new()
+	content.position = Vector2(12, 8)
+	content.size = Vector2(476, 180)
+	content.add_theme_constant_override("separation", 5)
+	panel.add_child(content)
 
 	var tl := UIKit.make_label("TIME", 12)
+	tl.position = Vector2(70, 279)
 	add_child(tl)
 
-	if parts.is_empty():
-		# PNG tidak ada / gagal dibaca -> bar polos
-		var fallback_bar := ProgressBar.new()
-		fallback_bar.show_percentage = false
-		fallback_bar.step = 0.01
-		fallback_bar.custom_minimum_size = Vector2(320, 12)
-		fallback_bar.size = Vector2(320, 12)
-		fallback_bar.position = Vector2(122, 297)
-		add_child(fallback_bar)
-		tl.position = Vector2(TIMER_LABEL_X, 293)
-		time_bar = fallback_bar
-		return
-
-	var fill: Texture2D = parts["fill"]
-	var fill_pos: Vector2 = parts["fill_pos"]
-
-	# Root dibuat seukuran gambar ASLI, lalu di-skala seragam. Anak-anaknya tidak perlu tahu skala.
-	var timer_root := Control.new()
-	timer_root.position = TIMER_POS
-	timer_root.size = parts["size"]
-	timer_root.scale = Vector2.ONE * TIMER_SCALE
-	timer_root.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(timer_root)
-
-	# Lapisan bawah: isi teal (tanpa nine-patch, ukuran asli, diletakkan di slot track)
-	var tex_bar := TextureProgressBar.new()
-	tex_bar.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	tex_bar.position = fill_pos
-	tex_bar.step = 0.01
-	tex_bar.fill_mode = TextureProgressBar.FILL_LEFT_TO_RIGHT
-	tex_bar.texture_progress = fill
-	timer_root.add_child(tex_bar)
-
-	# Lapisan atas: bingkai + kepala jam
-	var frame_rect := TextureRect.new()
-	frame_rect.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	frame_rect.texture = parts["frame"]
-	frame_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	timer_root.add_child(frame_rect)
-
-	# Label "TIME" sejajar dengan tengah track
-	var track_mid_y := TIMER_POS.y + (fill_pos.y + fill.get_height() * 0.5) * TIMER_SCALE
-	tl.position = Vector2(TIMER_LABEL_X, track_mid_y - 9.0)
-
-	time_bar = tex_bar
+	time_bar = ProgressBar.new()
+	time_bar.show_percentage = false
+	time_bar.custom_minimum_size = Vector2(430, 12)
+	time_bar.size = Vector2(430, 12)
+	time_bar.position = Vector2(120, 282)
+	add_child(time_bar)
 
 
-## Potong PNG timer (kanvas 1280x720) jadi bagian yang ada gambarnya saja.
-## frame = kepala jam + kotak track. fill = isi teal SAJA (dipotong sendiri), fill_pos = posisinya
-## di dalam frame -> persen isi pas dengan panjang track (50% = tepat separuh track).
-func _crop_timer_textures(frame_tex: Texture2D, fill_tex: Texture2D) -> Dictionary:
-	var f_img := frame_tex.get_image()
-	var b_img := fill_tex.get_image()
-	if f_img == null or b_img == null or f_img.is_empty() or b_img.is_empty():
-		return {}
-
-	if f_img.is_compressed():
-		f_img.decompress()
-	if b_img.is_compressed():
-		b_img.decompress()
-
-	var rect_f := f_img.get_used_rect()
-	var rect_b := b_img.get_used_rect()
-	if rect_f.size.x <= 0 or rect_b.size.x <= 0:
-		return {}
-	var used := rect_f.merge(rect_b)
-
-	return {
-		"frame": ImageTexture.create_from_image(f_img.get_region(used)),
-		"fill": ImageTexture.create_from_image(b_img.get_region(rect_b)),
-		"size": Vector2(used.size),
-		"fill_pos": Vector2(rect_b.position - used.position),
-	}
-
+# ---------- mulai soal ----------
 
 func start(question: Dictionary, time: float, options: Dictionary) -> void:
 	q = question
@@ -149,20 +68,21 @@ func start(question: Dictionary, time: float, options: Dictionary) -> void:
 	running = true
 	qte = null
 	handler = null
-	_clear_ui()
+	for c in content.get_children():
+		c.queue_free()
 
 	var tag := str(q.get("tag", ""))
 	if opts.get("stunned", false):
-		tag += "   [STUN: half time]"
+		tag += "   [STUN: waktu separuh]"
 	var tag_label := UIKit.make_label(tag, 10, Color(1, 0.8, 0.3))
 	tag_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	header.add_child(tag_label)
+	content.add_child(tag_label)
 
-	# Kalau soal punya gambar, gambarnya di kanan-atas papan dan teks soal dipersempit
-	var has_image := _add_image()
-	var ql := UIKit.make_label(str(q.get("question", "")), 12, Color.WHITE, TEXT_W - (76.0 if has_image else 0.0))
+	var ql := UIKit.make_label(str(q.get("question", "")), 12, Color.WHITE, 470.0)
 	ql.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	header.add_child(ql)
+	content.add_child(ql)
+
+	_add_image()
 
 	handler = QuestionTypes.create(str(q.get("type", "quiz")))
 	if handler == null:
@@ -171,30 +91,20 @@ func start(question: Dictionary, time: float, options: Dictionary) -> void:
 		return
 	handler.resolved.connect(_on_handler_resolved)
 	handler.timer_stopped.connect(func() -> void: running = false)
-	handler.build(body, q, opts)
+	handler.build(content, q, opts)
 	_build_actions()
 
 
-func _clear_ui() -> void:
-	for c in header.get_children():
-		c.queue_free()
-	for c in body.get_children():
-		c.queue_free()
-
-
-func _add_image() -> bool:
+func _add_image() -> void:
 	var path := str(q.get("image", ""))
 	if path == "" or not ResourceLoader.exists(path):
-		return false
+		return
 	var img := TextureRect.new()
 	img.texture = load(path)
-	img.position = Vector2(TEXT_X + TEXT_W - 68.0, 50)
-	img.size = Vector2(68, 56)
+	img.custom_minimum_size = Vector2(0, 64)
 	img.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	img.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	img.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	body.add_child(img)
-	return true
+	content.add_child(img)
 
 
 func _on_handler_resolved(outcome: String) -> void:
@@ -203,15 +113,16 @@ func _on_handler_resolved(outcome: String) -> void:
 	_finish(outcome)
 
 
+# ---------- tombol tambahan dari upgrade ----------
+# Upgrade menambah tombol lewat add_action() -> opts["actions"] = [{label, result}, ...]
+
 func _build_actions() -> void:
 	var actions: Array = opts.get("actions", [])
 	if actions.is_empty():
 		return
 	var row := HBoxContainer.new()
-	row.position = ACTIONS_POS
-	row.size = Vector2(ACTIONS_MAX_W, 22)
-	row.add_theme_constant_override("separation", 6)
-	body.add_child(row)
+	row.add_theme_constant_override("separation", 8)
+	content.add_child(row)
 	for a in actions:
 		var b := UIKit.make_button(str(a.get("label", "?")), 10)
 		b.pressed.connect(_on_action.bind(str(a.get("result", ""))))
@@ -227,16 +138,14 @@ func _on_action(outcome: String) -> void:
 		_finish(outcome)
 
 
+# ---------- QTE ----------
+
 func _start_qte() -> void:
-	_clear_ui()
-	qte = Qte.new()
+	for c in content.get_children():
+		c.queue_free()
+	qte = Qte.new()          # timer soal berhenti selama QTE (lihat _process)
 	qte.stopped.connect(_on_qte_stopped)
-	var box := VBoxContainer.new()
-	box.position = Vector2(TEXT_X, 70)
-	box.size = Vector2(TEXT_W, 170)
-	box.add_theme_constant_override("separation", 6)
-	body.add_child(box)
-	qte.build(box)
+	qte.build(content)
 
 
 func _on_qte_stopped(outcome: String) -> void:
@@ -244,6 +153,8 @@ func _on_qte_stopped(outcome: String) -> void:
 	await get_tree().create_timer(0.6, false).timeout
 	_finish(outcome)
 
+
+# ---------- loop & input ----------
 
 func _process(delta: float) -> void:
 	if done:

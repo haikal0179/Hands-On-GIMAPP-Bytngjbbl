@@ -6,7 +6,7 @@ func _init() -> void:
 	id = "seems_about_right"
 	display_name = "Seems About Right"
 	tier = 2
-	desc = "Removes 1 incorrect option from each multiple-choice question."
+	desc = "1 opsi salah dihapus dari soal pilihan ganda."
 
 
 func modify_quiz_options(opts: Dictionary) -> void:

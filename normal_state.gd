@@ -20,7 +20,7 @@ enum State { INTRO, QUIZ, RESOLVING, FINISHED }
 
 # ---- Numbers you can tweak in the Inspector ----
 @export var stage_title := "Test 1"
-@export var player_name := "TheO"
+@export var player_name := "UTBK, John"
 @export var player_max_hp := 180
 @export var player_damage := 40          # damage to enemy on a correct + on-time answer
 @export var card_shrink_scale := 0.6     # size of the HP cards while the quiz is open
@@ -28,9 +28,9 @@ enum State { INTRO, QUIZ, RESOLVING, FINISHED }
 
 # Enemies are fought in order. Add/remove lines to change the stage.
 var enemies: Array = [
-	{"name": "TyO", "hp": 220, "damage": 25},
-	{"name": "Anum", "hp": 260, "damage": 30},
-	{"name": "Lita", "hp": 300, "damage": 35},
+	{"name": "Ichikiwir", "hp": 220, "damage": 25},
+	{"name": "Ichikiwir II", "hp": 260, "damage": 30},
+	{"name": "Ichikiwir III", "hp": 300, "damage": 35},
 ]
 
 var player_hp: int

@@ -9,19 +9,15 @@ extends Control
 const UIKit := preload("res://core/ui_kit.gd")
 const QuizPanel := preload("res://features/quiz/quiz_panel.gd")
 const DialogueScene := preload("res://features/story/dialogue.tscn")
-const SettingsScene := preload("res://features/settings/settings.tscn")
-const EXIT_BUTTON_ICON := preload("res://assets/art/button/Exit button.png")
-const SETTINGS_BUTTON_ICON := preload("res://assets/art/button/Settings button.png")
-const RESUME_BUTTON_ICON := preload("res://assets/art/button/Play button.png")
 
 @export var intro_pause := 1.3      # jeda "musuh muncul" sebelum soal pertama
 @export var resolve_pause := 1.4    # jeda layar battle setelah jawaban (intermezzo)
 
-# "Inner thoughts" TheO (tema lore): muncul sebagai pesan saat gagal.
+# "Inner thoughts" John (tema lore): muncul sebagai pesan saat gagal.
 const THOUGHTS := {
-	"wrong": ["...I know this. Why did I forget?", "That's not it... that's not the answer.", "My memory's a mess."],
-	"timeout": ["Blank. My mind's gone empty.", "Time's up...", "I'm taking too long to think."],
-	"gamble_red": ["I guessed... and got it wrong. My head's pounding."],
+	"wrong": ["...aku tahu ini. Kenapa malah lupa?", "Bukan itu... bukan itu jawabannya.", "Ingatanku berantakan."],
+	"timeout": ["Blank. Kepalaku kosong.", "Waktunya habis...", "Terlalu lama berpikir."],
+	"gamble_red": ["Asal tebak... dan meleset. Kepalaku pusing."],
 }
 
 @onready var ui = $BattleUI
@@ -36,8 +32,6 @@ var stunned := false       # kena stun (gamble gagal): soal berikutnya waktunya 
 var finished := false
 var quiz
 var pause_layer: ColorRect
-var pause_canvas: CanvasLayer
-var pause_settings: Control
 var story_ui: CanvasLayer
 
 
@@ -59,7 +53,6 @@ func _ready() -> void:
 	quiz.answered.connect(_on_quiz_answered)
 
 	_build_pause_layer()
-	pause_canvas.get_node("PauseButton").escape_pressed.connect(_on_escape_pressed)
 	
 	story_ui = DialogueScene.instantiate()
 	add_child(story_ui)
@@ -73,7 +66,7 @@ func _ready() -> void:
 
 func _intro() -> void:
 	ui.set_quiz_mode(false)
-	var msg := "%s appears!" % level_data["enemy"]
+	var msg := "%s muncul!" % level_data["enemy"]
 	if GameState.notice != "":
 		msg = GameState.notice + "\n" + msg
 		GameState.notice = ""
@@ -116,7 +109,7 @@ func _on_quiz_answered(result: String) -> void:
 	if not handled:
 		if result == "correct":
 			Audio.play_sfx("correct")
-			await attack_enemy(1, 1.0, "Correct answer! The attack lands.")
+			await attack_enemy(1, 1.0, "Jawaban benar! Serangan masuk.")
 		else:
 			Audio.play_sfx("wrong")
 			await hurt_player(result)
@@ -153,7 +146,7 @@ func hurt_player(thought_key: String, allow_dodge: bool = true, extra: String = 
 	if allow_dodge:
 		for u in GameState.owned_upgrades():
 			if u.should_dodge():
-				ui.show_message(thought + "\n" + u.display_name + ": TheO dodges!")
+				ui.show_message(thought + "\n" + u.display_name + ": John menghindar!")
 				ui.float_text("player", "DODGE!", Color(0.5, 1.0, 0.6))
 				await _wait(0.3)
 				return
@@ -176,12 +169,12 @@ func _end_level(won: bool) -> void:
 	finished = true
 	if won:
 		Audio.play_sfx("win")
-		ui.show_message("%s is defeated! Level complete." % level_data["enemy"])
+		ui.show_message("%s tumbang! Level selesai." % level_data["enemy"])
 		await _wait(1.6)
 		await story_ui.play_story("level_%d_post" % (GameState.level + 1))
 	else:
 		Audio.play_sfx("lose")
-		ui.show_message("TheO has run out of energy...")
+		ui.show_message("John kehabisan tenaga...")
 		await _wait(1.6)
 	GameState.finish_level(won)
 
@@ -193,68 +186,27 @@ func _wait(t: float) -> void:
 # ---------- pause ----------
 
 func _on_pause() -> void:
-	if finished:
+	if finished or (story_ui and story_ui.is_active):
 		return
-	Audio.set_music_ducked(true)
 	get_tree().paused = true
 	pause_layer.visible = true
 
 
 func _on_resume() -> void:
 	pause_layer.visible = false
-	Audio.set_music_ducked(false)
 	get_tree().paused = false
-
-
-func _on_escape_pressed() -> void:
-	if pause_settings != null:
-		_on_pause_settings_closed()
-	elif get_tree().paused:
-		_on_resume()
-	else:
-		_on_pause()
-
-
-func _on_pause_settings() -> void:
-	if pause_settings != null:
-		return
-
-	pause_layer.hide()
-	pause_settings = SettingsScene.instantiate()
-	pause_settings.set("close_to_main_menu", false)
-	pause_settings.connect("closed", _on_pause_settings_closed)
-	pause_canvas.add_child(pause_settings)
-
-
-func _on_pause_settings_closed() -> void:
-	if pause_settings != null:
-		pause_settings.queue_free()
-		pause_settings = null
-	pause_layer.show()
 
 
 func _on_quit() -> void:
-	get_tree().paused = false
-	Audio.set_music_ducked(false)
 	GameState.goto(Config.SCENE_TITLE)
 
 
 func _build_pause_layer() -> void:
-	pause_canvas = CanvasLayer.new()
-	pause_canvas.layer = 30
-	pause_canvas.process_mode = Node.PROCESS_MODE_ALWAYS
-	add_child(pause_canvas)
-	
-	for btn in ui.find_children("*", "BaseButton", true, false):
-		btn.reparent(pause_canvas)
-		if not btn.pressed.is_connected(_on_pause):
-			btn.pressed.connect(_on_pause)
-	
 	pause_layer = ColorRect.new()
 	pause_layer.color = Color(0, 0, 0, 0.75)
 	pause_layer.process_mode = Node.PROCESS_MODE_ALWAYS
 	pause_layer.visible = false
-	pause_canvas.add_child(pause_layer)
+	add_child(pause_layer)
 	pause_layer.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	var center := CenterContainer.new()
 	pause_layer.add_child(center)
@@ -263,23 +215,9 @@ func _build_pause_layer() -> void:
 	box.add_theme_constant_override("separation", 10)
 	center.add_child(box)
 	box.add_child(UIKit.make_label("PAUSED", 22))
-
-	var buttons := HBoxContainer.new()
-	buttons.add_theme_constant_override("separation", 16)
-	buttons.alignment = BoxContainer.ALIGNMENT_CENTER
-	box.add_child(buttons)
-
-	var quit := UIKit.make_texture_button(EXIT_BUTTON_ICON, Vector2(56, 56))
-	quit.tooltip_text = "Exit to Main Menu"
-	quit.pressed.connect(_on_quit)
-	buttons.add_child(quit)
-
-	var settings := UIKit.make_texture_button(SETTINGS_BUTTON_ICON, Vector2(56, 56))
-	settings.tooltip_text = "Settings"
-	settings.pressed.connect(_on_pause_settings)
-	buttons.add_child(settings)
-
-	var resume := UIKit.make_texture_button(RESUME_BUTTON_ICON, Vector2(56, 56))
-	resume.tooltip_text = "Resume"
+	var resume := UIKit.make_button("Lanjut", 14)
 	resume.pressed.connect(_on_resume)
-	buttons.add_child(resume)
+	box.add_child(resume)
+	var quit := UIKit.make_button("Ke Menu Utama", 14)
+	quit.pressed.connect(_on_quit)
+	box.add_child(quit)
