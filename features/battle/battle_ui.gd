@@ -5,6 +5,13 @@ signal pause_pressed
 const PLAYER_IDLE_PATH := "res://assets/art/char/TheO Idle.png"
 const PLAYER_ATTACK_PATH := "res://assets/art/char/TheO Attack.png"
 
+const PLAYER_NAMECARD := {
+	"normal_frame": "res://assets/art/ui/namecards/Normal mode/Theo/NormalTheo_frame.png",
+	"normal_fill": "res://assets/art/ui/namecards/Normal mode/Theo/NormalTheo_filling.png",
+	"quiz_frame": "res://assets/art/ui/namecards/Quiz mode (smaller)/Theo/QuizTheo_frame.png",
+	"quiz_fill": "res://assets/art/ui/namecards/Quiz mode (smaller)/Theo/QuizTheo_filling.png",
+}
+
 const ENEMY_SPRITES := {
 	"tyo": {
 		"idle": "res://assets/art/char/TyO (TO) Idle.png",
@@ -25,6 +32,12 @@ const ENEMY_SPRITES := {
 }
 
 const ENEMY_NAMECARDS := {
+	"tyo": {
+		"normal_frame": "res://assets/art/ui/namecards/Normal mode/Tyo/NormalTyo_frame.png",
+		"normal_fill": "res://assets/art/ui/namecards/Normal mode/Tyo/NormalTyo_filling.png",
+		"quiz_frame": "res://assets/art/ui/namecards/Quiz mode (smaller)/Tyo/QuizTyo_frame.png",
+		"quiz_fill": "res://assets/art/ui/namecards/Quiz mode (smaller)/Tyo/QuizTyo_filling.png",
+	},
 	"anum": {
 		"normal_frame": "res://assets/art/ui/namecards/Normal mode/Anum/NormamAnum_frame.png",
 		"normal_fill": "res://assets/art/ui/namecards/Normal mode/Anum/NormslAnum_filling.png",
@@ -47,6 +60,7 @@ const ENEMY_NAMECARDS := {
 
 const LEVEL_FALLBACK_KEYS := ["tyo", "anum", "lita", "tika"]
 const CARD_SHRINK_SCALE := 0.62
+
 # --- Stage background & papan quiz (assets/art/stages/) ---
 const STAGE_BACKGROUNDS := {
 	"tyo": "res://assets/art/stages/Stage_TO.png",
@@ -59,10 +73,11 @@ const QUIZ_BOARD_REGION := Rect2(191, 92, 909, 529)   # bagian PNG yang terisi (
 const QUIZ_BOARD_RECT := Rect2(96, 46, 454, 264)      # posisi & ukuran papan di layar 640x360
 const QUIZ_BOARD_TINT := Color(0.55, 0.6, 0.85, 1.0)  # digelapkan sedikit biar teks putih kebaca
 
-# --- Namecard musuh ---
+# --- Namecard ---
 const CARD_ART_SCALE_NORMAL := 0.4   # aset digambar di kanvas 1280x720, layar game 640x360
 const CARD_ART_SCALE_QUIZ := 0.32
-const ENEMY_CARD_FALLBACK_POS := Vector2(420, 12)     # kartu vektor (TyO), kanan-atas
+const PLAYER_CARD_FALLBACK_POS := Vector2(40, 8)
+const ENEMY_CARD_FALLBACK_POS := Vector2(420, 12)
 
 # --- Warna plat judul & log (diambil dari palet aset) ---
 const PLATE_BG := Color(0.93, 0.93, 0.84)
@@ -85,12 +100,20 @@ var enemy_shadow: Panel
 var player_sprite: TextureRect
 var enemy_sprite: TextureRect
 
-# Kartu HP Pemain
+# Kartu HP Pemain (Mode Fallback Vector)
 var player_card: Panel
 var player_portrait: TextureRect
 var player_name_label: Label
 var player_bar: ProgressBar
 var player_hp_label: Label
+
+# Kartu HP Pemain (Mode Custom PNG Namecard TheO)
+var player_custom_root: Control
+var player_tex_bar: TextureProgressBar
+var player_frame_overlay: TextureRect
+var player_custom_hp_label: Label
+var has_custom_player_card := false
+var active_player_card_tex := {}
 
 # Kartu HP Musuh (Mode Fallback Vector)
 var enemy_card: Panel
@@ -145,6 +168,7 @@ func setup(stage_title: String, p_name: String, p_hp: int, p_max: int,
 	player_portrait.texture = _make_bust_portrait(player_idle_tex, true)
 	enemy_portrait.texture = _make_bust_portrait(enemy_idle_tex, false)
 
+	_setup_player_namecard()
 	_setup_enemy_namecard(enemy_key)
 
 	set_player_hp(p_hp, p_max)
@@ -152,6 +176,75 @@ func setup(stage_title: String, p_name: String, p_hp: int, p_max: int,
 
 	_start_player_idle()
 	_start_enemy_idle()
+
+
+func _setup_player_namecard() -> void:
+	var raw_nf := _safe_load_tex(PLAYER_NAMECARD["normal_frame"])
+	var raw_nb := _safe_load_tex(PLAYER_NAMECARD["normal_fill"])
+	var raw_qf := _safe_load_tex(PLAYER_NAMECARD["quiz_frame"])
+	var raw_qb := _safe_load_tex(PLAYER_NAMECARD["quiz_fill"])
+
+	if (raw_nf != null and raw_nb != null) or (raw_qf != null and raw_qb != null):
+		var norm_crop := _crop_paired_textures(raw_nf, raw_nb)
+		var quiz_crop := _crop_paired_textures(raw_qf, raw_qb)
+		active_player_card_tex = {
+			"normal_frame": norm_crop["a"],
+			"normal_fill": norm_crop["b"],
+			"normal_size": norm_crop["size"],
+			"normal_fill_rel": norm_crop["fill_rel"],
+			"quiz_frame": quiz_crop["a"],
+			"quiz_fill": quiz_crop["b"],
+			"quiz_size": quiz_crop["size"],
+			"quiz_fill_rel": quiz_crop["fill_rel"],
+		}
+		has_custom_player_card = true
+		player_card.visible = false
+		player_custom_root.visible = true
+		_apply_player_card_mode(false)
+		return
+
+	has_custom_player_card = false
+	player_card.visible = true
+	player_custom_root.visible = false
+
+
+func _apply_player_card_mode(quiz_on: bool) -> void:
+	if not has_custom_player_card:
+		return
+
+	var has_quiz: bool = active_player_card_tex["quiz_frame"] != null and active_player_card_tex["quiz_fill"] != null
+	var has_norm: bool = active_player_card_tex["normal_frame"] != null and active_player_card_tex["normal_fill"] != null
+	var use_quiz_tex := (quiz_on and has_quiz) or (not has_norm)
+
+	var tex_size: Vector2 = active_player_card_tex["quiz_size"] if use_quiz_tex else active_player_card_tex["normal_size"]
+	var fill_rel: Rect2 = active_player_card_tex["quiz_fill_rel"] if use_quiz_tex else active_player_card_tex["normal_fill_rel"]
+
+	var art_scale := CARD_ART_SCALE_QUIZ if quiz_on else CARD_ART_SCALE_NORMAL
+	var target_w := roundf(tex_size.x * art_scale)
+	var target_h := roundf(tex_size.y * art_scale)
+
+	player_tex_bar.texture_progress = active_player_card_tex["quiz_fill"] if use_quiz_tex else active_player_card_tex["normal_fill"]
+	player_frame_overlay.texture = active_player_card_tex["quiz_frame"] if use_quiz_tex else active_player_card_tex["normal_frame"]
+
+	player_custom_root.size = Vector2(target_w, target_h)
+	player_custom_root.pivot_offset = player_custom_root.size * 0.5
+	player_custom_root.position = Vector2(40.0, 12.0)
+
+	var bar_pos := Vector2(roundf(fill_rel.position.x * target_w), roundf(fill_rel.position.y * target_h))
+	var bar_size := Vector2(roundf(fill_rel.size.x * target_w), roundf(fill_rel.size.y * target_h))
+
+	player_tex_bar.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
+	player_tex_bar.position = bar_pos
+	player_tex_bar.size = bar_size
+
+	player_custom_hp_label.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
+	player_custom_hp_label.position = bar_pos
+	player_custom_hp_label.size = bar_size
+	player_custom_hp_label.add_theme_font_size_override("font_size", 6 if quiz_on else 7)
+
+	player_custom_root.scale = Vector2(0.92, 0.92)
+	create_tween().tween_property(player_custom_root, "scale", Vector2.ONE, 0.18)\
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 
 
 func _setup_enemy_namecard(enemy_key: String) -> void:
@@ -162,7 +255,7 @@ func _setup_enemy_namecard(enemy_key: String) -> void:
 		var raw_qf := _safe_load_tex(paths["quiz_frame"])
 		var raw_qb := _safe_load_tex(paths["quiz_fill"])
 
-		if raw_nf != null and raw_nb != null:
+		if (raw_nf != null and raw_nb != null) or (raw_qf != null and raw_qb != null):
 			var norm_crop := _crop_paired_textures(raw_nf, raw_nb)
 			var quiz_crop := _crop_paired_textures(raw_qf, raw_qb)
 			active_enemy_card_tex = {
@@ -190,17 +283,20 @@ func _apply_enemy_card_mode(quiz_on: bool) -> void:
 	if not has_custom_enemy_card:
 		return
 
-	var is_quiz := quiz_on and active_enemy_card_tex["quiz_frame"] != null
-	var tex_size: Vector2 = active_enemy_card_tex["quiz_size"] if is_quiz else active_enemy_card_tex["normal_size"]
-	var fill_rel: Rect2 = active_enemy_card_tex["quiz_fill_rel"] if is_quiz else active_enemy_card_tex["normal_fill_rel"]
+	var has_quiz: bool = active_enemy_card_tex["quiz_frame"] != null and active_enemy_card_tex["quiz_fill"] != null
+	var has_norm: bool = active_enemy_card_tex["normal_frame"] != null and active_enemy_card_tex["normal_fill"] != null
+	var use_quiz_tex := (quiz_on and has_quiz) or (not has_norm)
 
-	# Aset digambar di kanvas 1280x720 -> kali 0.5 supaya pas dengan layar game 640x360
-	var art_scale := CARD_ART_SCALE_QUIZ if is_quiz else CARD_ART_SCALE_NORMAL
+	var tex_size: Vector2 = active_enemy_card_tex["quiz_size"] if use_quiz_tex else active_enemy_card_tex["normal_size"]
+	var fill_rel: Rect2 = active_enemy_card_tex["quiz_fill_rel"] if use_quiz_tex else active_enemy_card_tex["normal_fill_rel"]
+
+	# Aset digambar di kanvas 1280x720 -> kali 0.4 / 0.32 supaya pas dengan layar game 640x360
+	var art_scale := CARD_ART_SCALE_QUIZ if quiz_on else CARD_ART_SCALE_NORMAL
 	var target_w := roundf(tex_size.x * art_scale)
 	var target_h := roundf(tex_size.y * art_scale)
 
-	enemy_tex_bar.texture_progress = active_enemy_card_tex["quiz_fill"] if is_quiz else active_enemy_card_tex["normal_fill"]
-	enemy_frame_overlay.texture = active_enemy_card_tex["quiz_frame"] if is_quiz else active_enemy_card_tex["normal_frame"]
+	enemy_tex_bar.texture_progress = active_enemy_card_tex["quiz_fill"] if use_quiz_tex else active_enemy_card_tex["normal_fill"]
+	enemy_frame_overlay.texture = active_enemy_card_tex["quiz_frame"] if use_quiz_tex else active_enemy_card_tex["normal_frame"]
 
 	enemy_custom_root.size = Vector2(target_w, target_h)
 	enemy_custom_root.pivot_offset = enemy_custom_root.size * 0.5
@@ -218,12 +314,13 @@ func _apply_enemy_card_mode(quiz_on: bool) -> void:
 	enemy_custom_hp_label.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
 	enemy_custom_hp_label.position = bar_pos
 	enemy_custom_hp_label.size = bar_size
-	enemy_custom_hp_label.add_theme_font_size_override("font_size", 6 if is_quiz else 7)
+	enemy_custom_hp_label.add_theme_font_size_override("font_size", 6 if quiz_on else 7)
 
 	# efek "pop" kecil setiap kartu ganti mode
 	enemy_custom_root.scale = Vector2(0.92, 0.92)
 	create_tween().tween_property(enemy_custom_root, "scale", Vector2.ONE, 0.18)\
 		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+
 
 func set_quiz_mode(on: bool) -> void:
 	battle_layer.visible = not on
@@ -235,23 +332,34 @@ func set_quiz_mode(on: bool) -> void:
 		create_tween().tween_property(quiz_board, "modulate:a", 1.0, 0.2)
 
 	var target := Vector2.ONE * (CARD_SHRINK_SCALE if on else 1.0)
-	var t := create_tween().set_parallel(true).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	t.tween_property(player_card, "scale", target, 0.25)
+	if has_custom_player_card:
+		_apply_player_card_mode(on)
+	else:
+		var tp := create_tween().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		tp.tween_property(player_card, "scale", target, 0.25)
 
 	if has_custom_enemy_card:
 		_apply_enemy_card_mode(on)
 	else:
-		t.tween_property(enemy_card, "scale", target, 0.25)
+		var te := create_tween().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		te.tween_property(enemy_card, "scale", target, 0.25)
+
 
 func show_message(text: String) -> void:
 	log_label.text = text
 	log_label.visible = text != ""
-	
+
+
 func set_player_hp(hp: int, max_hp: int) -> void:
 	player_bar.max_value = max_hp
-	var t := create_tween()
+	player_tex_bar.max_value = max_hp
+
+	var t := create_tween().set_parallel(true)
 	t.tween_property(player_bar, "value", float(hp), 0.25)
+	t.tween_property(player_tex_bar, "value", float(hp), 0.25)
+
 	player_hp_label.text = "HP: %d/%d" % [hp, max_hp]
+	player_custom_hp_label.text = "%d/%d" % [hp, max_hp]
 
 
 func set_enemy_hp(hp: int, max_hp: int) -> void:
@@ -356,7 +464,10 @@ func _play_enemy_hurt(damage: int) -> void:
 func _play_player_hurt(damage: int) -> void:
 	_spawn_popup("-%d" % damage, player_base_pos + Vector2(36, -10), Color("ef476f"))
 	_flash_and_shake(player_sprite, player_base_pos, -12.0)
-	_shake_card(player_card, Vector2(40, 8))
+	if has_custom_player_card:
+		_shake_card(player_custom_root, player_custom_root.position)
+	else:
+		_shake_card(player_card, PLAYER_CARD_FALLBACK_POS)
 
 
 func _flash_and_shake(node: Control, base_pos: Vector2, knockback_x: float) -> void:
@@ -482,15 +593,19 @@ func _build_ui() -> void:
 	enemy_sprite.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	enemy_sprite.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	battle_layer.add_child(enemy_sprite)
-	# --- Kartu HP pemain (kiri-atas) ---
-	var pc := _build_status_card(Vector2(40, 8), Color("4cc9f0"), false)
+
+	# --- Kartu HP pemain versi vektor (fallback) ---
+	var pc := _build_status_card(PLAYER_CARD_FALLBACK_POS, Color("4cc9f0"), false)
 	player_card = pc["panel"]
 	player_portrait = pc["portrait"]
 	player_name_label = pc["name"]
 	player_bar = pc["bar"]
 	player_hp_label = pc["hp"]
 
-	# --- Kartu HP musuh versi vektor (fallback, dipakai TyO) ---
+	# --- Kartu namecard PNG pemain (TheO) ---
+	_build_custom_player_card()
+
+	# --- Kartu HP musuh versi vektor (fallback) ---
 	var ec := _build_status_card(ENEMY_CARD_FALLBACK_POS, Color("f72585"), true)
 	enemy_card = ec["panel"]
 	enemy_portrait = ec["portrait"]
@@ -499,8 +614,40 @@ func _build_ui() -> void:
 	enemy_hp_label = ec["hp"]
 	enemy_bar.fill_mode = ProgressBar.FILL_END_TO_BEGIN   # HP habis dari kiri
 
-	# --- Kartu namecard PNG (Anum / Lita / Tika) ---
+	# --- Kartu namecard PNG musuh (TyO / Anum / Lita / Tika) ---
 	_build_custom_enemy_card()
+
+
+func _build_custom_player_card() -> void:
+	player_custom_root = Control.new()
+	player_custom_root.position = Vector2(40, 12)
+	player_custom_root.size = Vector2(193, 105)
+	player_custom_root.visible = false
+	player_custom_root.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(player_custom_root)
+
+	player_frame_overlay = TextureRect.new()
+	player_frame_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	player_frame_overlay.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	player_frame_overlay.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	player_frame_overlay.stretch_mode = TextureRect.STRETCH_SCALE
+	player_custom_root.add_child(player_frame_overlay)
+
+	player_tex_bar = TextureProgressBar.new()
+	player_tex_bar.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	player_tex_bar.nine_patch_stretch = true
+	player_tex_bar.step = 0.01
+	player_tex_bar.fill_mode = TextureProgressBar.FILL_LEFT_TO_RIGHT
+	player_custom_root.add_child(player_tex_bar)
+
+	player_custom_hp_label = Label.new()
+	player_custom_hp_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	player_custom_hp_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	player_custom_hp_label.add_theme_font_size_override("font_size", 8)
+	player_custom_hp_label.add_theme_color_override("font_color", Color.WHITE)
+	player_custom_hp_label.add_theme_color_override("font_outline_color", Color(0.05, 0.05, 0.08, 1.0))
+	player_custom_hp_label.add_theme_constant_override("outline_size", 3)
+	player_custom_root.add_child(player_custom_hp_label)
 
 
 func _build_custom_enemy_card() -> void:
@@ -620,6 +767,7 @@ func _make_shadow(pos: Vector2, sz: Vector2) -> Panel:
 	s.add_theme_stylebox_override("panel", st)
 	return s
 
+
 func _make_plate_style() -> StyleBoxFlat:
 	var st := StyleBoxFlat.new()
 	st.bg_color = PLATE_BG
@@ -630,25 +778,6 @@ func _make_plate_style() -> StyleBoxFlat:
 	st.content_margin_top = 3
 	st.content_margin_bottom = 3
 	return st
-
-func _add_corner_accent(pos: Vector2, bottom_left: bool) -> void:
-	var h := ColorRect.new()
-	var v := ColorRect.new()
-	var col := Color(0.45, 0.52, 0.65, 0.45)
-	h.color = col
-	v.color = col
-	if bottom_left:
-		h.position = pos + Vector2(0, 28)
-		h.size = Vector2(56, 2)
-		v.position = pos
-		v.size = Vector2(2, 30)
-	else:
-		h.position = pos
-		h.size = Vector2(56, 2)
-		v.position = pos + Vector2(54, 0)
-		v.size = Vector2(2, 30)
-	battle_layer.add_child(h)
-	battle_layer.add_child(v)
 
 
 func _crop_paired_textures(tex_a: Texture2D, tex_b: Texture2D) -> Dictionary:
@@ -697,9 +826,8 @@ func _resolve_enemy_key(e_name: String) -> String:
 
 
 func _safe_load_tex(path: String) -> Texture2D:
-	if ResourceLoader.exists(path):
+	if path != "" and ResourceLoader.exists(path):
 		return load(path) as Texture2D
-	push_warning("Aset battle tidak ditemukan: " + path)
 	return null
 
 

@@ -1,41 +1,76 @@
 extends Control
-## Layar judul. Tombol Mulai = run baru dari nol.
+## Layar judul dengan aset Main Menu (1).png tanpa tombol Settings.
 
 const UIKit := preload("res://core/ui_kit.gd")
+const MENU_TEXTURE_PATH := "res://assets/art/ui/Main Menu (1).png"
 
 var credit_overlay: ColorRect
 
 
 func _ready() -> void:
-	Audio.play_music("prologue") # BGM 
-	var box := UIKit.centered_column(self, 14)
-	box.add_child(UIKit.make_label("The Test of Time", 30, Color(1.0, 0.6, 0.0)))
-	box.add_child(UIKit.make_label("WILL YOU PASS UTBK?????", 14))
+	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	Audio.play_music("prologue")
 
-	# 1. Tombol MULAI (tetap pakai GameState.new_game bawaan tim)
-	var start := UIKit.make_button("START", 16)
-	start.pressed.connect(GameState.new_game)
-	box.add_child(start)
+	# 1. Tampilkan gambar aset Main Menu (256x144) secara penuh dengan filter Nearest
+	var bg_art := TextureRect.new()
+	bg_art.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	bg_art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	bg_art.stretch_mode = TextureRect.STRETCH_SCALE
+	bg_art.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	if ResourceLoader.exists(MENU_TEXTURE_PATH):
+		bg_art.texture = load(MENU_TEXTURE_PATH) as Texture2D
+	add_child(bg_art)
 
-	# 2. Tombol PENGATURAN
-	var settings := UIKit.make_button("SETTINGS", 16)
-	settings.pressed.connect(func() -> void: GameState.goto(Config.SCENE_SETTINGS))
-	box.add_child(settings)
+	# 2. Area klik transparan tepat di atas tombol START, CREDITS, dan EXIT
+	var start_btn := _make_hotspot_button(Rect2(0.370, 0.492, 0.268, 0.140))
+	start_btn.pressed.connect(GameState.new_game)
+	bg_art.add_child(start_btn)
 
-	# 3. Tombol KREDIT
-	var credit := UIKit.make_button("CREDITS", 16)
-	credit.pressed.connect(_on_credit_pressed)
-	box.add_child(credit)
+	var credits_btn := _make_hotspot_button(Rect2(0.370, 0.658, 0.268, 0.140))
+	credits_btn.pressed.connect(_on_credit_pressed)
+	bg_art.add_child(credits_btn)
 
-	# 4. Tombol KELUAR (sembunyikan otomatis jika dijalankan di Web)
 	if not OS.has_feature("web"):
-		var exit_btn := UIKit.make_button("EXIT", 16)
+		var exit_btn := _make_hotspot_button(Rect2(0.370, 0.822, 0.268, 0.140))
 		exit_btn.pressed.connect(_on_exit_pressed)
-		box.add_child(exit_btn)
+		bg_art.add_child(exit_btn)
 
-	box.add_child(UIKit.make_label("Answer questions before time runs out. Press 1-4 to choose an answer.", 12))
-
+	# 3. Overlay Credits bawaan UIKit
 	_build_credit_overlay()
+
+
+func _make_hotspot_button(rel_rect: Rect2) -> Button:
+	var btn := Button.new()
+	btn.focus_mode = Control.FOCUS_NONE
+	btn.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+
+	btn.anchor_left = rel_rect.position.x
+	btn.anchor_top = rel_rect.position.y
+	btn.anchor_right = rel_rect.position.x + rel_rect.size.x
+	btn.anchor_bottom = rel_rect.position.y + rel_rect.size.y
+	btn.offset_left = 0.0
+	btn.offset_top = 0.0
+	btn.offset_right = 0.0
+	btn.offset_bottom = 0.0
+
+	var normal := StyleBoxFlat.new()
+	normal.bg_color = Color(1.0, 1.0, 1.0, 0.0)
+	normal.set_corner_radius_all(12)
+
+	var hover := StyleBoxFlat.new()
+	hover.bg_color = Color(1.0, 1.0, 1.0, 0.16)
+	hover.border_color = Color(1.0, 1.0, 1.0, 0.45)
+	hover.set_border_width_all(2)
+	hover.set_corner_radius_all(12)
+
+	var pressed := StyleBoxFlat.new()
+	pressed.bg_color = Color(0.0, 0.0, 0.0, 0.22)
+	pressed.set_corner_radius_all(12)
+
+	btn.add_theme_stylebox_override("normal", normal)
+	btn.add_theme_stylebox_override("hover", hover)
+	btn.add_theme_stylebox_override("pressed", pressed)
+	return btn
 
 
 func _build_credit_overlay() -> void:
@@ -56,6 +91,7 @@ func _build_credit_overlay() -> void:
 
 func _on_credit_pressed() -> void:
 	credit_overlay.show()
+
 
 func _on_exit_pressed() -> void:
 	get_tree().quit()
