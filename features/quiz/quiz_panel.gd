@@ -222,6 +222,7 @@ func _on_action(outcome: String) -> void:
 	if done or (qte != null and qte.active):
 		return
 	if outcome == "qte":
+		Audio.play_sfx("Haven_t picked C in a while SFX")
 		_start_qte()
 	else:
 		_finish(outcome)

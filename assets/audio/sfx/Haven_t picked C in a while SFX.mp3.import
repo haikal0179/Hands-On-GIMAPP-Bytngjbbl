@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://6800xqoiat6h"
+path="res://.godot/imported/Haven_t picked C in a while SFX.mp3-4a774b16771da9bd83527540a21bed8b.mp3str"
+
+[deps]
+
+source_file="res://assets/audio/sfx/Haven_t picked C in a while SFX.mp3"
+dest_files=["res://.godot/imported/Haven_t picked C in a while SFX.mp3-4a774b16771da9bd83527540a21bed8b.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -1,14 +1,14 @@
 extends Node
 ## AUTOLOAD "Audio": musik per layar (crossfade) + SFX otomatis.
 ##   Musik : Audio.play_music("main")  -> res://assets/audio/music/main.mp3
-##   SFX   : Audio.play_sfx("hit")     -> res://assets/audio/sfx/hit.ogg|wav|mp3
-##   SFX yang dipakai game: click, correct, wrong, hit, hurt, win, lose
+##   SFX   : Audio.play_sfx("Attack SFX") -> res://assets/audio/sfx/Attack SFX.mp3
 
 const MUSIC_DIR := "res://assets/audio/music/"
 const SFX_DIR := "res://assets/audio/sfx/"
-const MUSIC_VOLUME_DB := 5.0   # makin kecil = makin pelan
+const MUSIC_VOLUME_DB := -15.0
+const SFX_VOLUME_DB := 3.0
 const FADE_TIME := 0.8
-const PAUSED_MUSIC_VOLUME_DB := -15.0
+const PAUSED_MUSIC_VOLUME_DB := -22.0
 const MUSIC_DUCK_FADE_TIME := 0.25
 const SETTINGS_PATH := "user://settings.cfg"
 const DEFAULT_MASTER_VOLUME := 1.0
@@ -141,6 +141,7 @@ func play_sfx(sfx_name: String) -> void:
 		return   # SFX belum ada -> dilewati
 	var p := AudioStreamPlayer.new()
 	p.stream = stream
+	p.volume_db = SFX_VOLUME_DB
 	add_child(p)
 	p.finished.connect(p.queue_free)
 	p.play()
