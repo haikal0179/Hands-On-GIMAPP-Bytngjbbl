@@ -8,7 +8,7 @@ func _init() -> void:
 	id = "typo_spotted"
 	display_name = "Typo Spotted"
 	tier = 2
-	desc = "Lewati 1 soal & langsung serang (1x per musuh)."
+	desc = "Skip 1 question and attack immediately (once per enemy)."
 
 
 func on_battle_start(_battle) -> void:
@@ -17,12 +17,12 @@ func on_battle_start(_battle) -> void:
 
 func modify_quiz_options(opts: Dictionary) -> void:
 	if not used:
-		add_action(opts, "Typo Spotted: skip & serang", "skip")
+		add_action(opts, "Typo Spotted: skip & attack", "skip")
 
 
 func on_quiz_result(result: String, battle) -> bool:
 	if result != "skip":
 		return false
 	used = true
-	await battle.attack_enemy(1, 1.0, "Typo Spotted! Soal dilewati, langsung serang.")
+	await battle.attack_enemy(1, 1.0, "Typo Spotted! Skipping the question and attacking now.")
 	return true

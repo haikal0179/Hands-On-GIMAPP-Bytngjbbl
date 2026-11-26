@@ -6,7 +6,7 @@ func _init() -> void:
 	id = "caffeine_overdose"
 	display_name = "Caffeine Overdose"
 	tier = 3
-	desc = "Timer separuh, tapi damage 2x."
+	desc = "The timer is halved, but damage is doubled."
 
 
 func modify_time(t: float) -> float:

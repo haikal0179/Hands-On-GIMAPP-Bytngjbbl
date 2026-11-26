@@ -6,7 +6,7 @@ func _init() -> void:
 	id = "sharpened_pencil"
 	display_name = "Sharpened Pencil"
 	tier = 1
-	desc = "+25% damage tiap serangan."
+	desc = "+25% damage per hit."
 
 
 func modify_damage(dmg: float) -> float:

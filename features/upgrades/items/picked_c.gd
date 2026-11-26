@@ -7,23 +7,23 @@ func _init() -> void:
 	id = "picked_c"
 	display_name = "Haven't Picked C In A While"
 	tier = 3
-	desc = "Tombol judi (QTE): sukses = 3x serang, gagal = stun."
+	desc = "Gamble (QTE): success = 3 attacks, failure = stun."
 
 
 func modify_quiz_options(opts: Dictionary) -> void:
-	add_action(opts, "Haven't Picked C: tebak (QTE)", "qte")
+	add_action(opts, "Haven't Picked C: Gamble (QTE)", "qte")
 
 
 func on_quiz_result(result: String, battle) -> bool:
 	match result:
 		"gamble_green":
-			await battle.attack_enemy(3, 1.0, "FULL SUCCESS! Tiga serangan beruntun!")
+			await battle.attack_enemy(3, 1.0, "FULL SUCCESS! Three hits in a row!")
 			return true
 		"gamble_orange":
-			await battle.attack_enemy(1, 1.2, "Minor success! Serangan +20%.")
+			await battle.attack_enemy(1, 1.2, "Minor success! +20% attack.")
 			return true
 		"gamble_red":
 			battle.stunned = true
-			await battle.hurt_player("gamble_red", false, "STUN! Soal berikutnya waktunya separuh.")
+			await battle.hurt_player("gamble_red", false, "STUN! Half the time for the next question.")
 			return true
 	return false
