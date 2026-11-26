@@ -169,7 +169,7 @@ func start(question: Dictionary, time: float, options: Dictionary) -> void:
 	var ql := UIKit.make_label(question_text, QUESTION_FONT_SIZE, Color.WHITE, question_width)
 	ql.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	header.add_child(ql)
-	_fit_question_label(ql, question_text, question_width)
+	_fit_question_label(ql, question_width)
 
 	handler = QuestionTypes.create(str(q.get("type", "quiz")))
 	if handler == null:
@@ -182,17 +182,22 @@ func start(question: Dictionary, time: float, options: Dictionary) -> void:
 	_build_actions()
 
 
-func _fit_question_label(label: Label, text: String, width: float) -> void:
-	var font := label.get_theme_font("font")
-	var font_size := QUESTION_FONT_SIZE
-	var text_size := font.get_multiline_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, width, font_size)
-	while text_size.y > QUESTION_MAX_HEIGHT and font_size > QUESTION_MIN_FONT_SIZE:
-		font_size -= 1
-		text_size = font.get_multiline_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, width, font_size)
-
-	label.add_theme_font_size_override("font_size", font_size)
+func _fit_question_label(label: Label, width: float) -> void:
 	label.custom_minimum_size = Vector2(width, QUESTION_MAX_HEIGHT)
 	label.clip_text = true
+	_fit_question_label_after_layout.call_deferred(label)
+
+
+func _fit_question_label_after_layout(label: Label) -> void:
+	await get_tree().process_frame
+	var font_size := label.get_theme_font_size("font_size")
+	while label.get_visible_line_count() < label.get_line_count() and font_size > QUESTION_MIN_FONT_SIZE:
+		font_size -= 1
+		label.add_theme_font_size_override("font_size", font_size)
+		await get_tree().process_frame
+
+	if label.get_visible_line_count() < label.get_line_count():
+		push_warning("Quiz prompt still clipped at minimum font size: " + label.text)
 
 
 func _clear_ui() -> void:

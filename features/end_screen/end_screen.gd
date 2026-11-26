@@ -6,7 +6,7 @@ const WIN_SCREEN := preload("res://assets/art/Win Screen.png")
 
 
 func _ready() -> void:
-	Audio.play_music("prologue" if GameState.result == "victory" else "flashback") #BGM
+	Audio.play_music("prologue" if GameState.result == "victory" else "lose_screen")
 
 	if GameState.result == "victory":
 		_show_win_screen()
