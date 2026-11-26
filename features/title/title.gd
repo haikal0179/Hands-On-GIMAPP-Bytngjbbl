@@ -90,7 +90,8 @@ func _build_credit_overlay() -> void:
 
 
 func _on_credit_pressed() -> void:
-	credit_overlay.show()
+	Audio.play_sfx("click")
+	GameState.goto("res://features/credits/credits.tscn")
 
 
 func _on_exit_pressed() -> void:
