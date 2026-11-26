@@ -30,10 +30,9 @@ func _ready() -> void:
 	credits_btn.pressed.connect(_on_credit_pressed)
 	bg_art.add_child(credits_btn)
 
-	if not OS.has_feature("web"):
-		var exit_btn := _make_hotspot_button(Rect2(0.370, 0.822, 0.268, 0.140))
-		exit_btn.pressed.connect(_on_exit_pressed)
-		bg_art.add_child(exit_btn)
+	var exit_btn := _make_hotspot_button(Rect2(0.370, 0.822, 0.268, 0.140))
+	exit_btn.pressed.connect(_on_exit_pressed)
+	bg_art.add_child(exit_btn)
 
 	# 3. Overlay Credits bawaan UIKit
 	_build_credit_overlay()
