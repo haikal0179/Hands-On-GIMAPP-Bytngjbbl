@@ -8,6 +8,6 @@ func _init() -> void:
 	tier = 2
 	desc = "Removes 1 incorrect option from each multiple-choice question."
 
-John
+
 func modify_quiz_options(opts: Dictionary) -> void:
 	opts["remove_wrong"] = true
