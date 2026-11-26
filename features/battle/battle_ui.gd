@@ -56,7 +56,7 @@ const STAGE_BACKGROUNDS := {
 }
 const QUIZ_BOARD_PATH := "res://assets/art/stages/Stage_background quiz.png"
 const QUIZ_BOARD_REGION := Rect2(191, 92, 909, 529)   # bagian PNG yang terisi (kanvas 1280x720)
-const QUIZ_BOARD_RECT := Rect2(54, 60, 532, 266)      # posisi & ukuran papan di layar 640x360
+const QUIZ_BOARD_RECT := Rect2(96, 46, 454, 264)      # posisi & ukuran papan di layar 640x360
 const QUIZ_BOARD_TINT := Color(0.55, 0.6, 0.85, 1.0)  # digelapkan sedikit biar teks putih kebaca
 
 # --- Namecard musuh ---

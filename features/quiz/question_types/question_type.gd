@@ -15,9 +15,10 @@ func validate(_q: Dictionary) -> String:
 	return ""
 
 
-## Bangun tampilan soal ke dalam `content` (VBoxContainer milik panel).
+## Bangun tampilan soal ke dalam `content` (Control kosong seukuran layar 640x360 milik panel;
+## taruh node dengan posisi absolut, atau buat container sendiri di dalamnya).
 ## opts = opsi dari upgrade (mis. opts["remove_wrong"], opts["stunned"]).
-func build(_content: Container, _q: Dictionary, _opts: Dictionary) -> void:
+func build(_content: Control, _q: Dictionary, _opts: Dictionary) -> void:
 	pass
 
 
