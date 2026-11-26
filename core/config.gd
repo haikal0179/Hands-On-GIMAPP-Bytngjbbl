@@ -13,7 +13,7 @@ const SCENE_END := "res://features/end_screen/end_screen.tscn"
 const QUESTIONS_DIR := "res://data/questions"          # level_1.json ... level_4.json
 
 # ---- player ----
-const PLAYER_NAME := "UTBK, John"
+const PLAYER_NAME := "TheO"
 const PLAYER_MAX_HP := 180
 const BASE_DAMAGE := 40
 

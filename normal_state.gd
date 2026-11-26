@@ -20,7 +20,7 @@ enum State { INTRO, QUIZ, RESOLVING, FINISHED }
 
 # ---- Numbers you can tweak in the Inspector ----
 @export var stage_title := "Test 1"
-@export var player_name := "UTBK, John"
+@export var player_name := "TheO"
 @export var player_max_hp := 180
 @export var player_damage := 40          # damage to enemy on a correct + on-time answer
 @export var card_shrink_scale := 0.6     # size of the HP cards while the quiz is open

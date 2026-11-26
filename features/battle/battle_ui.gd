@@ -204,7 +204,7 @@ func _apply_enemy_card_mode(quiz_on: bool) -> void:
 
 	enemy_custom_root.size = Vector2(target_w, target_h)
 	enemy_custom_root.pivot_offset = enemy_custom_root.size * 0.5
-	# kanan-atas di semua mode (normal & quiz), sejajar dengan kartu John
+	# kanan-atas di semua mode (normal & quiz), sejajar dengan kartu TheO
 	enemy_custom_root.position = Vector2(640.0 - target_w - 16.0, 12.0)
 
 	# Slot bar & angka HP mengikuti posisi slot di aset

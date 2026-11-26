@@ -9,7 +9,7 @@ var credit_overlay: ColorRect
 func _ready() -> void:
 	Audio.play_music("prologue") # BGM 
 	var box := UIKit.centered_column(self, 14)
-	box.add_child(UIKit.make_label("The Ultimate UTBK", 30, Color(1.0, 0.6, 0.0)))
+	box.add_child(UIKit.make_label("The Test of Time", 30, Color(1.0, 0.6, 0.0)))
 	box.add_child(UIKit.make_label("WILL YOU PASS UTBK?????", 14))
 
 	# 1. Tombol MULAI (tetap pakai GameState.new_game bawaan tim)
@@ -47,7 +47,7 @@ func _build_credit_overlay() -> void:
 
 	var credit_box := UIKit.centered_column(credit_overlay, 12)
 	credit_box.add_child(UIKit.make_label("TEAM CREDITS", 24, Color(1.0, 0.6, 0.0)))
-	credit_box.add_child(UIKit.make_label("The Ultimate UTBK\n\n- Team Member 1 (Role)\n- Team Member 2 (Role)\n- Team Member 3 (Role)", 14))
+	credit_box.add_child(UIKit.make_label("The Test of Time\n\n- Team Member 1 (Role)\n- Team Member 2 (Role)\n- Team Member 3 (Role)", 14))
 
 	var close_btn := UIKit.make_button("CLOSE", 16)
 	close_btn.pressed.connect(credit_overlay.hide)

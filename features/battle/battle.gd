@@ -17,7 +17,7 @@ const RESUME_BUTTON_ICON := preload("res://assets/art/button/Play button.png")
 @export var intro_pause := 1.3      # jeda "musuh muncul" sebelum soal pertama
 @export var resolve_pause := 1.4    # jeda layar battle setelah jawaban (intermezzo)
 
-# "Inner thoughts" John (tema lore): muncul sebagai pesan saat gagal.
+# "Inner thoughts" TheO (tema lore): muncul sebagai pesan saat gagal.
 const THOUGHTS := {
 	"wrong": ["...I know this. Why did I forget?", "That's not it... that's not the answer.", "My memory's a mess."],
 	"timeout": ["Blank. My mind's gone empty.", "Time's up...", "I'm taking too long to think."],
@@ -153,7 +153,7 @@ func hurt_player(thought_key: String, allow_dodge: bool = true, extra: String = 
 	if allow_dodge:
 		for u in GameState.owned_upgrades():
 			if u.should_dodge():
-				ui.show_message(thought + "\n" + u.display_name + ": John dodges!")
+				ui.show_message(thought + "\n" + u.display_name + ": TheO dodges!")
 				ui.float_text("player", "DODGE!", Color(0.5, 1.0, 0.6))
 				await _wait(0.3)
 				return
@@ -181,7 +181,7 @@ func _end_level(won: bool) -> void:
 		await story_ui.play_story("level_%d_post" % (GameState.level + 1))
 	else:
 		Audio.play_sfx("lose")
-		ui.show_message("John has run out of energy...")
+		ui.show_message("TheO has run out of energy...")
 		await _wait(1.6)
 	GameState.finish_level(won)
 
